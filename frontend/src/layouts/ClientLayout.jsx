@@ -1,21 +1,23 @@
 import { Link, Outlet } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
 
 const ClientLayout = () => {
   return (
-    <div>
-      <header className="p-4 bg-gray-800 text-white">
-        <Link to="/">
-          <h1 className="text-xl">Receiptly</h1>
-        </Link>
-        <nav className="mt-4">
-          <Link to="/" className="mr-4">Home</Link>
-          <Link to="/reports" className="mr-4">Reports</Link>
-          <Link to="/create-category">Create Category</Link>
-        </nav>
-      </header>
-      <main className="p-4">
-        <Outlet />
-      </main>
+    <div className="flex min-h-screen bg-gray-100">
+      {/* Sidebar */}
+      <Sidebar className="min-h-screen" />
+      
+      {/* Main Content */}
+      <div className="flex flex-col flex-1">
+        {/* Navbar */}
+        <Navbar />
+        
+        {/* Main Content Area */}
+        <main className="p-6 flex-grow">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };
