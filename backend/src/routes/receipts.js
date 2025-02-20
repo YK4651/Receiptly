@@ -1,6 +1,7 @@
 const express = require('express');
 const { 
-  analyzeReceipt
+  analyzeReceipt,
+  saveReceipt
 } = require('../controllers/receiptController');
 const { authMiddleware } = require('../middleware/authMiddleware');
 
@@ -11,5 +12,8 @@ router.use(authMiddleware);
 
 // Analyze a receipt
 router.post('/analyze', analyzeReceipt);
+
+// Save a receipt data
+router.post('/saveReceipt', saveReceipt);
 
 module.exports = router;
