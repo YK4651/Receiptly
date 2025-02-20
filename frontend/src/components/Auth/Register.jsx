@@ -18,10 +18,18 @@ const Register = () => {
     }
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleRegister();
+    }
+  };
+
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="w-full max-w-xs">
-        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div className="flex justify-center items-center h-screen bg-gray-700">
+      <div className="w-full max-w-md">
+        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onKeyPress={handleKeyPress}>
+          <h2 className="text-center text-3xl">Create your account</h2>
+          <h4 className="text-center py-2 text-gray-400">Please enter your details</h4>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
               Name
@@ -62,11 +70,20 @@ const Register = () => {
             <button
               type="button"
               onClick={handleRegister}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-black hover:bg-black text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
             >
-              Register
+              Sign Up
             </button>
           </div>
+          <p className="text-center text-gray-500 mt-3">
+            Already have an account?{" "}
+            <a
+              href="/login"
+              className="text-blue-500 hover:text-blue-800"
+            >
+              Sign in
+            </a>
+          </p>
         </form>
       </div>
     </div>
