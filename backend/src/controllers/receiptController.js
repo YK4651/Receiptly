@@ -91,3 +91,21 @@ exports.analyzeReceipt = async (req, res) => {
     res.status(500).json({ message: 'Error analyzing receipt', error });
   }
 };
+
+// Save result to the database
+exports.saveReceipt = async (req, res) => {
+  try {
+    const { userId, results } = req.body; 
+
+    const newReceipt = new Receipt({
+      userId: userId,
+      receiptData: results,
+      createdAt: new Date(),
+    });
+
+    const savedReceipt = await newReceipt.save();
+    res.status(201).json({ savedReceipt });
+  } catch (error) {
+    res.status(500).json({ message: 'Error saving receipt', error });
+  }
+};

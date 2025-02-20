@@ -12,11 +12,6 @@ const receiptSchema = new mongoose.Schema({
     required: true,
     description: "The data extracted from the receipt"
   },
-  imageUrls: {
-    type: Array,
-    required: true,
-    description: "The files associated with the receipt"
-  },
   createdAt: {
     type: Date,
     default: Date.now,
