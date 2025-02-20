@@ -9,7 +9,6 @@ import FileInput from "./FileInput";
 import LoadingSpinner from "./LoadingSpinner";
 import ResultsTable from "./ResultsTable";
 import Reports from "./Reports";
-import CreateCategory from "./CreateCategory";
 import Modal from "./Modal";
 
 const App = () => {
@@ -157,7 +156,6 @@ const App = () => {
           </>
         } />
         <Route path="/reports" element={<Reports />} />
-        <Route path="/create-category" element={<CreateCategory />} />
       </Routes>
     </div>
   );
