@@ -12,21 +12,25 @@ export const login = async (email, password) => {
     throw new Error("Login failed");
   }
 
+  // set token and user data in local storage
   const data = response.data;
   const token = data.token;
-  const userId = data.userId; // Assuming the response contains userId
-  const expiryTime = new Date().getTime() + 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+  const userId = data.userId; 
+  const name = data.name; 
+  const userEmail = data.email; 
+  const expiryTime = new Date().getTime() + 2 * 60 * 60 * 1000; 
 
   localStorage.setItem("token", token);
-  localStorage.setItem("userId", userId); // Store userId in local storage
+  localStorage.setItem("userId", userId); 
+  localStorage.setItem("name", name);
+  localStorage.setItem("email", userEmail); 
   localStorage.setItem("tokenExpiry", expiryTime);
 
   return data;
 };
 
-export const register = async (name, email, password) => {
+export const register = async (email, password) => {
   const response = await axios.post(`${API_BASE_URL}/auth/register`, {
-    name,
     email,
     password,
   });
