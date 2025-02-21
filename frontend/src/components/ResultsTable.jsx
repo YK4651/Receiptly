@@ -112,6 +112,18 @@ const ResultsTable = ({ data, onUpdate }) => {
                 )}
               </div>
               <div className="mb-4">
+                <h4 className="text-md font-semibold mb-2">Tax</h4>
+                <input
+                  type="text"
+                  value={result.tax}
+                  onChange={(e) => handleInputChange(arrayIndex, 'tax', e.target.value)}
+                  className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                {errors[`${arrayIndex}-tax`] && (
+                  <p className="text-red-500 text-xs mt-1">{errors[`${arrayIndex}-tax`]}</p>
+                )}
+              </div>
+              <div className="mb-4">
                 <h4 className="text-md font-semibold mb-2">Receipt Category</h4>
                 <input
                   type="text"

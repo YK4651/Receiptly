@@ -41,7 +41,7 @@ exports.analyzeReceipt = async (req, res) => {
         messages: [
           {
             role: 'system',
-            content: 'You are a helpful assistant for organizing receipt data. Extract the receipt details into the following fields: "Store Name", "Items", "Total", "Receipt Category", and "Subcategory". Provide output as a JSON object.',
+            content: 'You are a helpful assistant for organizing receipt data. Extract the receipt details into the following fields: "Store Name", "Items", "Total", "tax", "Receipt Category". If you cannot find fields, value should be undefined.  Provide output as a JSON object.',
           },
           {
             role: 'user',
@@ -78,6 +78,7 @@ exports.analyzeReceipt = async (req, res) => {
           items: jsonData['Items'],
           total: jsonData['Total'],
           receiptCategory: jsonData['Receipt Category'],
+          tax: jsonData['tax'],
           subcategory: jsonData['Subcategory'],
         };
       } catch (parseError) {
