@@ -63,7 +63,7 @@ const FileInput = ({ handleFileChange, isLoading, fileNames, progress }) => {
         </h4>
         <div className="flex items-center justify-center">
           <label>
-            <input type="file" accept="image/*" hidden multiple onChange={handleInputChange} disabled={isLoading} />
+            <input type="file" accept="image/*, application/pdf" hidden multiple onChange={handleInputChange} disabled={isLoading} />
             <div className={`flex w-28 h-9 px-2 flex-col rounded-full shadow text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none ${isLoading ? "bg-gray-400" : "bg-gray-500"}`}>
               Choose Files
             </div>
