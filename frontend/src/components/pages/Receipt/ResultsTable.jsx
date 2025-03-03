@@ -115,7 +115,7 @@ const ResultsTable = ({ data, onUpdate }) => {
                 <h4 className="text-md font-semibold mb-2">Tax</h4>
                 <input
                   type="text"
-                  value={result.tax}
+                  value={result.totalTax}
                   onChange={(e) => handleInputChange(arrayIndex, 'tax', e.target.value)}
                   className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />

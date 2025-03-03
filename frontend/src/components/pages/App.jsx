@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { analyzeReceipt, saveReceipt } from "../api/receipts";
+import { analyzeReceipt, saveReceipt } from "../../api/receipts";
 import imageCompression from "browser-image-compression";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { Route, Routes } from "react-router-dom";
-import Button from "./Button";
-import FileInput from "./FileInput";
-import LoadingSpinner from "./LoadingSpinner";
-import ResultsTable from "./ResultsTable";
-import Reports from "./Reports";
-import Modal from "./Modal";
+import Button from "../common/Button";
+import FileInput from "../common/FileInput";
+import LoadingSpinner from "../common/LoadingSpinner";
+import ResultsTable from "../pages/Receipt/ResultsTable";
+import Reports from "../pages/Reports/Reports";
+import Modal from "../common/Modal";
 import * as pdfjsLib from "pdfjs-dist";
 
 // Set the workerSrc for pdfjs-dist

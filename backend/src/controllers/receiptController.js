@@ -41,7 +41,7 @@ exports.analyzeReceipt = async (req, res) => {
         messages: [
           {
             role: 'system',
-            content: 'You are a helpful assistant for organizing receipt data. Extract the receipt details into the following fields: "Store Name", "Items", "Total", "tax", "Receipt Category". If you cannot find fields, value should be undefined.  Provide output as a JSON object.',
+            content: 'You are a helpful assistant for organizing receipt data. Extract the receipt details into the following fields: "Store Name", "Items", "Total", "Tax", "Total Tax", "Receipt Category". If you cannot find fields, value should be undefined. Provide output as a JSON object.',
           },
           {
             role: 'user',
@@ -69,7 +69,10 @@ exports.analyzeReceipt = async (req, res) => {
       let organizedData = openAiResult.choices[0].message.content;
       const jsonStartIndex = organizedData.indexOf('{');
       const jsonEndIndex = organizedData.lastIndexOf('}') + 1;
-      const jsonString = organizedData.substring(jsonStartIndex, jsonEndIndex);
+      let jsonString = organizedData.substring(jsonStartIndex, jsonEndIndex);
+
+      // Replace undefined values with null
+      jsonString = jsonString.replace(/undefined/g, 'null');
 
       try {
         const jsonData = JSON.parse(jsonString);
@@ -77,8 +80,9 @@ exports.analyzeReceipt = async (req, res) => {
           storeName: jsonData['Store Name'],
           items: jsonData['Items'],
           total: jsonData['Total'],
+          tax: jsonData['Tax'],
+          totalTax: jsonData['Total Tax'],
           receiptCategory: jsonData['Receipt Category'],
-          tax: jsonData['tax'],
           subcategory: jsonData['Subcategory'],
         };
       } catch (parseError) {

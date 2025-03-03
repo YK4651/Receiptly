@@ -1,6 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
+import Sidebar from "../navigation/Sidebar";
+import Navbar from "../navigation/Navbar";
 
 const ClientLayout = () => {
   return (
