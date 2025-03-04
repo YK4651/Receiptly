@@ -1,29 +1,31 @@
-import { FiBell } from "react-icons/fi";
+import { FiBell, FiChevronDown } from "react-icons/fi";
 import { useState } from "react";
 
 const Navbar = () => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white shadow-md p-4 flex justify-between items-center">
+    <header className="bg-white p-4 flex justify-between items-center">
       {/* Welcome Message */}
-      <div>
-        <h2 className="text-lg font-semibold">Welcome Back, {localStorage.getItem('name')} 👋</h2>
-        <p className="text-gray-500 text-sm">Here what’s happening with your expenses today.</p>
+      <div className="pt-8 pb-8 pl-6">
+        <h2 className="text-2xl font-semibold py-1 text-gray-700">Welcome Back, 
+          <span className="px-2 pr-3">{localStorage.getItem('name')}</span>👋</h2>
+        <p className="text-gray-500 font-light text-md">Here what’s happening with your expenses today.</p>
       </div>
       
       {/* Right Section */}
       <div className="flex items-center space-x-4">
         {/* Notification Icon */}
-        <button className="relative text-gray-600 hover:text-gray-900">
+        <button className="relative text-gray-600 hover:text-gray-900 border border-gray-200 rounded-full px-1.5 py-1.5 mr-6">
           <FiBell size={20} />
         </button>
         
         {/* User Menu */}
         <div className="relative">
-          <button onClick={() => setUserMenuOpen(!userMenuOpen)} className="flex items-center space-x-2 border rounded-lg px-3 py-1 text-gray-700 hover:bg-gray-100">
-            <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">{localStorage.getItem('name')?.split(' ').map(n => n[0]).join('')}</div>
-            <span>{localStorage.getItem('name')}</span>
+          <button onClick={() => setUserMenuOpen(!userMenuOpen)} className="flex items-center space-x-2 border border-gray-200 rounded-sm px-3 py-2 text-gray-700 hover:bg-gray-100">
+            <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center text-sm text-white">{localStorage.getItem('name')?.split(' ').map(n => n[0]).join('')}</div>
+            <span className="px-3">{localStorage.getItem('name')}</span>
+            <span><FiChevronDown /></span>
           </button>
           
           {/* Dropdown Menu */}
