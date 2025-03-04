@@ -1,6 +1,7 @@
 const Receipt = require('../models/Receipt');
 const vision = require('@google-cloud/vision');
 const axios = require('axios');
+const { Dropbox } = require('dropbox');
 
 exports.analyzeReceipt = async (req, res) => {
   try {
@@ -100,17 +101,47 @@ exports.analyzeReceipt = async (req, res) => {
 // Save result to the database
 exports.saveReceipt = async (req, res) => {
   try {
-    const { userId, results } = req.body; 
+    const { userId, results, images, path } = req.body; // Expecting images and path for Dropbox
+    const dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN, fetch });
 
+    // Step 1: Save images to Dropbox
+    const dropboxResponses = await Promise.all(images.map(async (imageBase64, index) => {
+      const filename = `receipt_${index}_${Math.random().toString(36).substring(2, 15)}.png`;
+      const response = await dbx.filesUpload({
+        path: `/receipts_${userId}/${filename}`,
+        contents: Buffer.from(imageBase64, 'base64'),
+        mode: 'add',
+        autorename: true,
+        mute: false,
+      });
+      return { path: response.result.path_display, filename };
+    }));
+    
+    // Step 2: Create shared links for the uploaded images
+    const sharedLinks = await Promise.all(dropboxResponses.map(async (file) => {
+      const sharedLinkResponse = await dbx.sharingCreateSharedLinkWithSettings({
+        path: file.path,
+        settings: {
+          requested_visibility: 'public',
+        },
+      });
+      return sharedLinkResponse.result.url.replace('?dl=0', '?raw=1'); // Convert to direct download link
+    }));
+    
+    // Step 3: Save receipt data to the database
     const newReceipt = new Receipt({
       userId: userId,
       receiptData: results,
+      imageFilenames: dropboxResponses.map(file => file.filename),
+      imageUrls: sharedLinks, // Save public URLs of Dropbox images
       createdAt: new Date(),
     });
+    await Receipt.deleteMany({ userId });
 
     const savedReceipt = await newReceipt.save();
-    res.status(201).json({ savedReceipt });
+    res.status(201).json({ savedReceipt, dropboxPaths: sharedLinks });
   } catch (error) {
     res.status(500).json({ message: 'Error saving receipt', error });
   }
 };
+
