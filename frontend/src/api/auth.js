@@ -36,9 +36,31 @@ export const register = async (name, email, password) => {
     password,
   });
 
-  if (response.status !== 200) {
+  if (response.status !== 201) {
     throw new Error("Registration failed");
   }
 
-  return response.data;
+  // set token and user data in local storage
+  const data = response.data;
+  const token = data.token;
+  const userId = data.userId; 
+  const userName = data.name; 
+  const userEmail = data.email; 
+  const expiryTime = new Date().getTime() + 2 * 60 * 60 * 1000; 
+
+  localStorage.setItem("token", token);
+  localStorage.setItem("userId", userId); 
+  localStorage.setItem("name", userName);
+  localStorage.setItem("email", userEmail); 
+  localStorage.setItem("tokenExpiry", expiryTime);
+
+  return data;
+};
+
+export const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("userId");
+  localStorage.removeItem("name");
+  localStorage.removeItem("email");
+  localStorage.removeItem("tokenExpiry");
 };
