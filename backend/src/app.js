@@ -9,6 +9,7 @@ const connectDB = require('./config/db');
 // Import Routes
 const authRoutes = require('./routes/auth');
 const receiptRoutes = require('./routes/receipts');
+const reportRoutes = require('./routes/reports');
 
 // Load environment variables
 dotenv.config();
@@ -30,6 +31,7 @@ app.use(morgan('dev'));
 // Routes Middleware
 app.use('/api/auth', authRoutes);
 app.use('/api/receipts', receiptRoutes);
+app.use('/api/reports', reportRoutes);
 
 // Default Route
 app.get('/', (req, res) => {
