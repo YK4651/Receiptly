@@ -20,6 +20,7 @@ const FinancialMetrics = ({ onDateChange }) => {
 	};
 
 	const handleExportReport = () => {
+		// To be adjusted
 		const doc = new jsPDF();
 		doc.text("Financial Report", 20, 20);
 		doc.text(
@@ -33,7 +34,8 @@ const FinancialMetrics = ({ onDateChange }) => {
 	};
 
 	const handleAddMore = () => {
-		console.log("Add More Clicked! Implement functionality here.");
+		// To be implemented
+		console.log("to follow");
 	};
 
 	return (
@@ -46,7 +48,7 @@ const FinancialMetrics = ({ onDateChange }) => {
 			</p>
 
 			{/* Date Range Picker */}
-			<div className='mt-4 flex items-center space-x-4'>
+			<div className='mt-4 flex justify-between items-center space-x-4'>
 				<div className='relative inline-flex items-center border border-gray-300 px-3 py-1 rounded-lg cursor-pointer bg-white'>
 					<FiCalendar className='w-4 h-4 text-gray-500 mr-2' />
 					<DatePicker
@@ -65,7 +67,7 @@ const FinancialMetrics = ({ onDateChange }) => {
 				<div>
 					<button
 						onClick={handleExportReport}
-						className='px-3 py-2 bg-white text-xs text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-300 transition'
+						className='mx-2 px-3 py-2 bg-white text-xs text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-300 transition'
 					>
 						<div className="flex">
 							<FiDownloadCloud />

@@ -64,18 +64,8 @@ const Reports = () => {
     fetchData();
   }, [dateRange]);
 
-  const exportPDF = () => {
-    const doc = new jsPDF();
-    doc.text("Financial Report", 10, 10);
-    doc.save("report.pdf");
-  };
-
-  const handleAddMore = () => {
-    console.log("Add more charts functionality pending...");
-  };
-
   return (
-    <div className="bg-white">
+    <div className="bg-white py-4 pl-4">
       <h2 className="text-lg font-medium mb-1">Reports & Insights</h2>
       <p className="text-xs/4 font-light text-gray-500 mb-6">Track key metrics and gain insights to make smarter<br />financial decisions.</p>
       {/* Menu Navigation */}
@@ -86,9 +76,9 @@ const Reports = () => {
 
       {/* Charts */}
       <div className="grid grid-cols-2 gap-4">
-        <div>
+        <div className='col-span-2'>
           <h3 className="text-lg mb-2">Bar Chart</h3>
-          <Bar data={chartData} />
+          <Line data={chartData} />
         </div>
         <div>
           <h3 className="text-lg mb-2">Line Chart</h3>

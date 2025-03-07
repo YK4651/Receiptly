@@ -8,7 +8,7 @@ const Menu = ({ selectedCategory, setSelectedCategory }) => {
     ];
   
     return (
-      <div className="flex space-x-4 mb-4">
+      <div className="flex space-x-4 mb-8">
         {categories.map((category) => (
           <button
             key={category}

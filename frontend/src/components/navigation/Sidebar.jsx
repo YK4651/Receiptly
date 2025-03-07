@@ -5,7 +5,7 @@ const Sidebar = () => {
   //const userImage = localStorage.getItem('userImage') || 'https://www.svgrepo.com/show/382106/user.svg';
 
   return (
-    <aside className="w-64 bg-[#131861] shadow-md p-6 flex flex-col min-h-screen border-r border-gray-300">
+    <aside className="w-64 bg-[#131861] fixed shadow-md p-6 flex flex-col min-h-screen border-r border-gray-300">
       <div>
         {/* Logo */}
         <div className="text-sm font-medium text-white font-bold mb-6 "><span className="bg-[#eaebfd]/15 p-3 rounded-md">LOGO</span></div>
