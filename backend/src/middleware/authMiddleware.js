@@ -21,8 +21,8 @@ const authMiddleware = async (req, res, next) => {
 };
 
 const validateRegistration = (req, res, next) => {
-  const { username, password, email } = req.body;
-  if (!username || !password || !email) {
+  const { name, email, password } = req.body;
+  if (!name || !email || !password) {
     return res.status(400).json({ message: 'All fields are required' });
   }
   // Additional validation logic can be added here
@@ -30,9 +30,9 @@ const validateRegistration = (req, res, next) => {
 };
 
 const validateLogin = (req, res, next) => {
-  const { username, password } = req.body;
-  if (!username || !password) {
-    return res.status(400).json({ message: 'Username and password are required' });
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required' });
   }
   // Additional validation logic can be added here
   next();

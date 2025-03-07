@@ -9,9 +9,7 @@ const connectDB = require('./config/db');
 // Import Routes
 const authRoutes = require('./routes/auth');
 const receiptRoutes = require('./routes/receipts');
-const categoryRoutes = require('./routes/categories');
 const reportRoutes = require('./routes/reports');
-const notificationRoutes = require('./routes/notifications');
 
 // Load environment variables
 dotenv.config();
@@ -33,9 +31,7 @@ app.use(morgan('dev'));
 // Routes Middleware
 app.use('/api/auth', authRoutes);
 app.use('/api/receipts', receiptRoutes);
-app.use('/api/categories', categoryRoutes);
 app.use('/api/reports', reportRoutes);
-app.use('/api/notifications', notificationRoutes);
 
 // Default Route
 app.get('/', (req, res) => {
