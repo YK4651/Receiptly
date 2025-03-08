@@ -63,3 +63,20 @@ export const fetchReceipts = async () => {
 
   return response.data;
 };
+
+export const updateReceipt = async (id, updatedData) => {
+  const token = localStorage.getItem("token"); // Retrieve token from local storage
+
+  const response = await axios.put(`${API_BASE_URL}/receipts/${id}`, updatedData, {
+      headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+      },
+  });
+
+  if (response.status !== 200) {
+      throw new Error("Receipt update failed");
+  }
+
+  return response.data;
+};
