@@ -3,6 +3,7 @@ const vision = require('@google-cloud/vision');
 const axios = require('axios');
 const { Dropbox } = require('dropbox');
 
+
 // Get all receipts for a user
 exports.getReceipts = async (req, res) => {
   //return res.status(200).json({ message: req.user });
