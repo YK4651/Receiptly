@@ -11,157 +11,160 @@ import Pagination from "./Pagination";
 import UploadModal from "../../common/UploadModal";
 
 const Receipts = () => {
-	const [receipts, setReceipts] = useState([]);
-	const [searchTerm, setSearchTerm] = useState("");
-	const [categoryFilter, setCategoryFilter] = useState("");
-	const [subcategoryFilter, setSubcategoryFilter] = useState("");
-	const [startDate, setStartDate] = useState("");
-	const [endDate, setEndDate] = useState("");
-	const [selectedReceipts, setSelectedReceipts] = useState([]);
-	const [selectedReceipt, setSelectedReceipt] = useState(null);
-	const [currentPage, setCurrentPage] = useState(1);
-	const itemsPerPage = 10;
+    const [receipts, setReceipts] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [categoryFilter, setCategoryFilter] = useState("");
+    const [subcategoryFilter, setSubcategoryFilter] = useState("");
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const [selectedReceipts, setSelectedReceipts] = useState([]);
+    const [selectedReceipt, setSelectedReceipt] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
-	useEffect(() => {
-		const getReceipts = async () => {
-			try {
-				const data = await fetchReceipts();
-				setReceipts(data);
-			} catch (error) {
-				console.error("Error fetching receipts:", error);
-				toast.error("Error fetching receipts");
-			}
-		};
+    useEffect(() => {
+        const getReceipts = async () => {
+            try {
+                const data = await fetchReceipts();
+                setReceipts(data);
+            } catch (error) {
+                console.error("Error fetching receipts:", error);
+                toast.error("Error fetching receipts");
+            }
+        };
 
-		getReceipts();
-	}, []);
+        getReceipts();
+    }, []);
 
-	const uniqueCategories = [
-		...new Set(
-			receipts.flatMap((receipt) =>
-				receipt.receiptData.map((data) => data.receiptCategory)
-			)
-		),
-	];
+    const handleFileChange = (files) => {
+        // Handle file change logic here
+        console.log("Files selected:", files);
+    };
 
-	const filteredReceipts = receipts.filter(
-		(receipt) =>
-			receipt.receiptData.some(
-				(data) =>
-					data.storeName.toLowerCase().includes(searchTerm.toLowerCase()) &&
-					(categoryFilter === "" || data.receiptCategory === categoryFilter) &&
-					(subcategoryFilter === "" || data.subcategory === subcategoryFilter)
-			) &&
-			(!startDate ||
-				new Date(receipt.createdAt.$date?.$numberLong || receipt.createdAt) >=
-					new Date(startDate)) &&
-			(!endDate ||
-				new Date(receipt.createdAt.$date?.$numberLong || receipt.createdAt) <=
-					new Date(endDate))
-	);
+    const uniqueCategories = [
+        ...new Set(
+            receipts.flatMap((receipt) =>
+                receipt.receiptData.map((data) => data.receiptCategory)
+            )
+        ),
+    ];
 
-	const handleCheckboxChange = (receipt) => {
-		setSelectedReceipts((prevSelected) =>
-			prevSelected.includes(receipt)
-				? prevSelected.filter((r) => r !== receipt)
-				: [...prevSelected, receipt]
-		);
-	};
+    const filteredReceipts = receipts.filter(
+        (receipt) =>
+            receipt.receiptData.some(
+                (data) =>
+                    data.storeName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+                    (categoryFilter === "" || data.receiptCategory === categoryFilter) &&
+                    (subcategoryFilter === "" || data.subcategory === subcategoryFilter)
+            ) &&
+            (!startDate ||
+                new Date(receipt.createdAt.$date?.$numberLong || receipt.createdAt) >=
+                    new Date(startDate)) &&
+            (!endDate ||
+                new Date(receipt.createdAt.$date?.$numberLong || receipt.createdAt) <=
+                    new Date(endDate))
+    );
 
-	const handleSelectAll = () => {
-		if (selectedReceipts.length === filteredReceipts.length) {
-			setSelectedReceipts([]);
-		} else {
-			setSelectedReceipts(filteredReceipts);
-		}
-	};
+    const handleCheckboxChange = (receipt) => {
+        setSelectedReceipts((prevSelected) =>
+            prevSelected.includes(receipt)
+                ? prevSelected.filter((r) => r !== receipt)
+                : [...prevSelected, receipt]
+        );
+    };
 
-	const csvData = selectedReceipts.flatMap((receipt) =>
-		receipt.receiptData.map((data) => ({
-			storeName: data.storeName,
-			receiptCategory: data.receiptCategory,
-			subcategory: data.subcategory,
-			total: data.total,
-			createdAt: new Date(
-				receipt.createdAt.$date?.$numberLong || receipt.createdAt
-			).toLocaleDateString(),
-		}))
-	);
+    const handleSelectAll = () => {
+        if (selectedReceipts.length === filteredReceipts.length) {
+            setSelectedReceipts([]);
+        } else {
+            setSelectedReceipts(filteredReceipts);
+        }
+    };
 
-	const totalPages = Math.ceil(filteredReceipts.length / itemsPerPage);
-	const paginatedReceipts = filteredReceipts.slice(
-		(currentPage - 1) * itemsPerPage,
-		currentPage * itemsPerPage
-	);
+    const csvData = selectedReceipts.flatMap((receipt) =>
+        receipt.receiptData.map((data) => ({
+            storeName: data.storeName,
+            receiptCategory: data.receiptCategory,
+            subcategory: data.subcategory,
+            total: data.total,
+            createdAt: new Date(
+                receipt.createdAt.$date?.$numberLong || receipt.createdAt
+            ).toLocaleDateString(),
+        }))
+    );
 
-	const handleSave = (id, updatedReceipt) => {
-		setReceipts((prevReceipts) =>
-			prevReceipts.map((receipt) =>
-				receipt._id === id
-					? { ...receipt, receiptData: [updatedReceipt] }
-					: receipt
-			)
-		);
-		setSelectedReceipt(null); // Close the modal after saving
-	};
+    const totalPages = Math.ceil(filteredReceipts.length / itemsPerPage);
+    const paginatedReceipts = filteredReceipts.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
 
-	return (
-		<div className='p-6 border border-gray-200 rounded-lg shadow-sm'>
-			<div className="flex items-center justify-between pb-4">
-                {/* <FileInput /> */}
-				<h2 className='text-2xl font-medium'>Receipt uploaded</h2>
-                <UploadModal />
-			</div>
+    const handleSave = (id, updatedReceipt) => {
+        setReceipts((prevReceipts) =>
+            prevReceipts.map((receipt) =>
+                receipt._id === id
+                    ? { ...receipt, receiptData: [updatedReceipt] }
+                    : receipt
+            )
+        );
+        setSelectedReceipt(null); // Close the modal after saving
+    };
 
-			<ReceiptFilter
-				searchTerm={searchTerm}
-				setSearchTerm={setSearchTerm}
-				categoryFilter={categoryFilter}
-				setCategoryFilter={setCategoryFilter}
-				startDate={startDate}
-				setStartDate={setStartDate}
-				endDate={endDate}
-				setEndDate={setEndDate}
-				uniqueCategories={uniqueCategories}
-			/>
-            {/* CSV Currently Hidden */}
-			<div className='mt-4'>
-				<CSVLink
-					data={csvData}
-					filename={"receipts.csv"}
-					className='p-2 bg-blue-500 text-white rounded-lg hidden'
-				>
-					Export to CSV
-				</CSVLink>
-			</div>
-			<ReceiptTable
-				paginatedReceipts={paginatedReceipts}
-				selectedReceipts={selectedReceipts}
-				handleCheckboxChange={handleCheckboxChange}
-				handleSelectAll={handleSelectAll}
-				setSelectedReceipt={setSelectedReceipt}
-				filteredReceipts={filteredReceipts}
-				handleSave={handleSave} // Pass the handleSave function
-			/>
-			<Pagination
-				currentPage={currentPage}
-				totalPages={totalPages}
-				setCurrentPage={setCurrentPage}
-			/>
-			{selectedReceipt && (
-				<Modal
-					isOpen={!!selectedReceipt}
-					onClose={() => setSelectedReceipt(null)}
-				>
-					<ViewReceipt
-						receipt={selectedReceipt}
-						onClose={() => setSelectedReceipt(null)}
-						onSave={handleSave}
-					/>
-				</Modal>
-			)}
-		</div>
-	);
+    return (
+        <div className='p-6 border border-gray-200 rounded-lg shadow-sm'>
+            <div className="flex items-center justify-between pb-4">
+                <h2 className='text-2xl font-medium'>Receipt uploaded</h2>
+                <UploadModal handleFileChange={handleFileChange} />
+            </div>
+
+            <ReceiptFilter
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                categoryFilter={categoryFilter}
+                setCategoryFilter={setCategoryFilter}
+                startDate={startDate}
+                setStartDate={setStartDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
+                uniqueCategories={uniqueCategories}
+            />
+            <div className='mt-4'>
+                <CSVLink
+                    data={csvData}
+                    filename={"receipts.csv"}
+                    className='p-2 bg-blue-500 text-white rounded-lg hidden'
+                >
+                    Export to CSV
+                </CSVLink>
+            </div>
+            <ReceiptTable
+                paginatedReceipts={paginatedReceipts}
+                selectedReceipts={selectedReceipts}
+                handleCheckboxChange={handleCheckboxChange}
+                handleSelectAll={handleSelectAll}
+                setSelectedReceipt={setSelectedReceipt}
+                filteredReceipts={filteredReceipts}
+                handleSave={handleSave} // Pass the handleSave function
+            />
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                setCurrentPage={setCurrentPage}
+            />
+            {selectedReceipt && (
+                <Modal
+                    isOpen={!!selectedReceipt}
+                    onClose={() => setSelectedReceipt(null)}
+                >
+                    <ViewReceipt
+                        receipt={selectedReceipt}
+                        onClose={() => setSelectedReceipt(null)}
+                        onSave={handleSave}
+                    />
+                </Modal>
+            )}
+        </div>
+    );
 };
 
 export default Receipts;

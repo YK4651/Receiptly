@@ -1,8 +1,9 @@
+// src/components/common/UploadModal.jsx
 import { useState } from "react";
 import { FiUploadCloud, FiX } from "react-icons/fi";
 import FileInput from "../common/FileInput"; // Import the FileInput component
 
-const UploadModal = () => {
+const UploadModal = ({ handleFileChange }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleModal = () => setIsOpen(!isOpen);
@@ -30,7 +31,7 @@ const UploadModal = () => {
             </div>
 
             {/* FileInput Component Inside Modal */}
-            <FileInput />
+            <FileInput handleFileChange={handleFileChange} />
           </div>
         </div>
       )}
