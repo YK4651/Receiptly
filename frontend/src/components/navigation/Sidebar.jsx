@@ -12,16 +12,16 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="w-64 bg-[#131861] fixed shadow-md p-6 flex flex-col min-h-screen border-r border-gray-300">
+    <aside className="w-64 bg-[#0B0F3B] fixed shadow-md p-6 flex flex-col min-h-screen border-r border-gray-300">
       <div>
         {/* Logo */}
-        <div className="text-sm font-medium text-white font-bold mb-6">
+        <div className="text-sm font-medium text-[#9AA4B2] font-bold mb-6">
           <span className="bg-[#eaebfd]/15 p-3 rounded-md">LOGO</span>
         </div>
 
         {/* Search Bar */}
         <div className="mb-4 relative">
-          <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-300" />
+          <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#9AA4B2]" />
           <input
             type="text"
             placeholder="Search"
@@ -39,8 +39,8 @@ const Sidebar = () => {
                   className={`flex py-2 px-2 rounded-md items-center space-x-2 
                     ${
                       location.pathname === path
-                        ? "bg-[#eaebfd]/20 text-white"
-                        : "text-gray-400 hover:bg-[#eaebfd]/20 hover:text-white"
+                        ? "bg-[#eaebfd]/25 text-[#eaebfd]"
+                        : "text-[#9AA4B2] hover:bg-[#eaebfd]/20 hover:text-white"
                     }`}
                 >
                   <span className="text-xl">{icon}</span>

@@ -50,17 +50,15 @@ const ExportReport = () => {
 			});
 	};
 
-	return (
-		<button
-			onClick={handleExportReport}
-			className='mx-2 px-3 py-2 bg-white text-xs text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-300 transition'
-		>
-			<div className='flex'>
-				<FiDownloadCloud />
-				<p className='pl-2'>Export Report</p>
-			</div>
-		</button>
-	);
+    return (
+        <button
+            onClick={handleExportReport}
+            className='mx-2 px-3 py-2 bg-white text-xs text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-300 transition h-[40px] w-[150px] flex items-center justify-center'
+        >
+            <FiDownloadCloud className="h-5 w-5 mr-2"/>
+            <p className='text-[14px]'>Export Report</p>
+        </button>
+    );
 };
 
 export default ExportReport;

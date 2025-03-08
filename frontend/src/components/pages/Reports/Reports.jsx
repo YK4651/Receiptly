@@ -82,8 +82,8 @@ const Reports = () => {
 
 	return (
 		<div className='bg-white py-4 pl-4'>
-			<h2 className='text-lg font-medium mb-1'>Reports & Insights</h2>
-			<p className='text-xs/4 font-light text-gray-500 mb-6'>
+			<h2 className='text-[24px] font-[700] mb-1'>Reports & Insights</h2>
+			<p className='text-[16px] font-[400] text-gray-500 mb-6'>
 				Track key metrics and gain insights to make smarter
 				<br />
 				financial decisions.
@@ -95,10 +95,9 @@ const Reports = () => {
 				setSelectedCategory={setSelectedCategory}
 			/>
 
-			{/* Financial Metrics (only for Financial category) */}
-			{selectedCategory === "Financial" && (
+			{/* {selectedCategory === "Financial" && ( */}
 				<FinancialMetrics onDateChange={setDateRange} />
-			)}
+			{/* // )} */}
 
 			{/* Charts */}
 			<div id='report-container' className='p-4 bg-white w-full'>

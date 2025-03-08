@@ -21,8 +21,8 @@ const FinancialMetrics = ({ onDateChange, openChartModal }) => {
 
 	return (
 		<div className='mb-4 bg-white rounded'>
-			<h3 className='text-md font-medium'>Financial Metrics</h3>
-			<p className='text-xs/4 font-light text-gray-500 mb-4 mt-1'>
+			<h3 className='text-[18px] font-[700]'>Financial Metrics</h3>
+			<p className='text-[16px] font-light text-gray-500 mb-4 mt-1'>
 				Track your startups financial health with real-time insights on cash
 				flow, <br />
 				profitability, and growth.
@@ -30,7 +30,7 @@ const FinancialMetrics = ({ onDateChange, openChartModal }) => {
 
 			{/* Date Range Picker */}
 			<div className='mt-4 flex justify-between items-center space-x-4'>
-				<div className='relative inline-flex items-center border border-gray-300 px-3 py-1 rounded-lg cursor-pointer bg-white'>
+				<div className='relative inline-flex items-center border border-gray-300 px-3 py-1 rounded-lg cursor-pointer bg-white  h-[40px] w-[239px]'>
 					<FiCalendar className='w-4 h-4 text-gray-500 mr-2' />
 					<DatePicker
 						selected={startDate}
@@ -40,7 +40,7 @@ const FinancialMetrics = ({ onDateChange, openChartModal }) => {
 						selectsRange
 						dateFormat='MMM d, yyyy'
 						placeholderText='Select Date Range'
-						className='outline-none text-xs w-40 text-gray-500'
+						className='outline-none text-[14px] w-[179px] text-[#344054]'
 					/>
 				</div>
 
