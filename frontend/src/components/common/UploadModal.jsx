@@ -44,7 +44,7 @@ const UploadModal = ({ handleFileChange }) => {
           base64Images.push(base64Image);
 
           if (base64Images.length === files.length) {
-            analyzeImages(base64Images);
+            analyzeImages(base64Images, files);
           }
         };
         reader.readAsDataURL(file);
@@ -59,13 +59,13 @@ const UploadModal = ({ handleFileChange }) => {
     }
   };
 
-  const analyzeImages = async (base64Images) => {
+  const analyzeImages = async (base64Images, files) => {
     try {
       const result = await analyzeReceipt(base64Images);
       const textAnnotations = result?.results;
       console.log("Result:", result.results);
       if (textAnnotations && textAnnotations.length > 0) {
-        handleFileChange(result); // Pass the analyzed data back to Receipts.jsx
+        handleFileChange({ ...result, images: files }); // Pass the analyzed data and images back to Receipts.jsx
         toast.success("Analysis completed successfully!");
       } else {
         toast.warn("Text not found in the images.");
@@ -114,7 +114,7 @@ const UploadModal = ({ handleFileChange }) => {
             {isLoading && (
               <div className="mt-4">
                 <LoadingSpinner />
-                <h2 className="text-center text-xl mt-4">We're categorizing your receipts</h2>
+                <h2 className="text-center text-xl mt-4">We're working on your receipts</h2>
                 <h4 className="text-center mt-4 text-gray-400">hang in there, we'll be done in a bit.</h4>
               </div>
             )}

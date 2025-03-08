@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import { CSVLink } from "react-csv";
 import Modal from "../../common/Modal";
 import ViewReceipt from "./ViewReceipt";
-import { fetchReceipts } from "../../../api/receipts";
+import { fetchReceipts, saveReceipt } from "../../../api/receipts";
 import { toast } from "react-toastify";
 import ReceiptFilter from "./ReceiptFilter";
 import ReceiptTable from "./ReceiptTable";
 import Pagination from "./Pagination";
 import UploadModal from "../../common/UploadModal";
 import ResultsTable from "../Receipt/ResultsTable"; // Import ResultsTable
+import Button from "../../common/Button"; // Import Button
+import LoadingSpinner from "../../common/LoadingSpinner"; // Import LoadingSpinner
 
 const Receipts = () => {
     const [receipts, setReceipts] = useState([]);
@@ -21,6 +23,8 @@ const Receipts = () => {
     const [selectedReceipt, setSelectedReceipt] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [analyzedData, setAnalyzedData] = useState(null); // State to store analyzed data
+    const [isLoading, setIsLoading] = useState(false);
+    const [progress, setProgress] = useState(0);
     const itemsPerPage = 10;
 
     useEffect(() => {
@@ -112,6 +116,42 @@ const Receipts = () => {
         setSelectedReceipt(null); // Close the modal after saving
     };
 
+    const handleSaveReceipt = async () => {
+        console.log("Analyzed data:", analyzedData);
+        if (analyzedData) {
+            setIsLoading(true);
+            setProgress(0);
+
+            try {
+                const base64Images = analyzedData.images.map(image => {
+                    const reader = new FileReader();
+                    return new Promise((resolve, reject) => {
+                        reader.onload = (event) => {
+                            resolve(event.target.result.split(",")[1]);
+                        };
+                        reader.onerror = reject;
+                        reader.readAsDataURL(image);
+                    });
+                });
+
+                const images = await Promise.all(base64Images);
+
+                await saveReceipt(JSON.stringify(analyzedData), images);
+                // Clear everything after saving
+                setAnalyzedData(null);
+                toast.success("Receipt saved successfully!");
+                // Refresh the table data
+                const data = await fetchReceipts();
+                setReceipts(data);
+            } catch (error) {
+                toast.error("Error saving receipt.");
+            } finally {
+                setIsLoading(false);
+                setProgress(100);
+            }
+        }
+    };
+
     return (
         <div className='p-6 border border-gray-200 rounded-lg shadow-sm'>
             <div className="flex items-center justify-between pb-4">
@@ -119,7 +159,16 @@ const Receipts = () => {
                 <UploadModal handleFileChange={handleFileChange} />
             </div>
             {analyzedData && (
-                <ResultsTable data={analyzedData} onUpdate={setAnalyzedData} />
+                <>
+                    <ResultsTable data={analyzedData} onUpdate={setAnalyzedData} />
+                    <Button
+                        className="mt-4 bg-gray-500"
+                        onClick={handleSaveReceipt}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? "Saving..." : "Save Results"}
+                    </Button>
+                </>
             )}
             <ReceiptFilter
                 searchTerm={searchTerm}
@@ -167,7 +216,11 @@ const Receipts = () => {
                     />
                 </Modal>
             )}
-            
+            <Modal isOpen={isLoading} onClose={() => {}}>
+                <LoadingSpinner />
+                <h2 className="text-center text-xl mt-4">We're categorizing your receipts</h2>
+                <h4 className="text-center mt-4 text-gray-400">hang in there, we'll be done in a bit.</h4>
+            </Modal>
         </div>
     );
 };
