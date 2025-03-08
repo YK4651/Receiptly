@@ -7,6 +7,7 @@ import Register from "./components/pages/Auth/Register.jsx";
 import ClientLayout from "./components/layouts/ClientLayout.jsx";
 import AuthMiddleware from "./components/pages/Auth/AuthMiddleware.jsx";
 import Reports from "./components/pages/Reports/Reports.jsx";
+import ResultsTable from "./components/pages/Receipt/ResultsTable.jsx";
 import "./index.css"; // Import Tailwind CSS
 
 createRoot(document.getElementById("root")).render(
@@ -15,7 +16,10 @@ createRoot(document.getElementById("root")).render(
       <Routes>
         <Route path="/" element={<ClientLayout />}>
           <Route index element={<AuthMiddleware><App /></AuthMiddleware>} />
+          <Route path="/receipts" element={<AuthMiddleware><ResultsTable /></AuthMiddleware>} />
+          {/* <Route path="/receipts" element={<AuthMiddleware><ResultsTable /></AuthMiddleware>} /> */}
           <Route path="/reports" element={<AuthMiddleware><Reports /></AuthMiddleware>} />
+
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

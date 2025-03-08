@@ -16,6 +16,7 @@
     "axios": "^1.7.9",
     "browser-image-compression": "^2.0.2",
     "date-fns": "^4.1.0",
+    "dom-to-image": "^2.6.0",
     "jspdf": "^3.0.0",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^3.11.174",
