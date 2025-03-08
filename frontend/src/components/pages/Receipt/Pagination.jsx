@@ -1,4 +1,5 @@
 import React from 'react';
+import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 
 const Pagination = ({ currentPage, totalPages, setCurrentPage }) => {
     const pageNumbers = [];
@@ -8,20 +9,20 @@ const Pagination = ({ currentPage, totalPages, setCurrentPage }) => {
     }
 
     return (
-        <div className="flex justify-between items-center mt-4">
+        <div className="flex items-center justify-between border-t border-gray-200 mt-3 pt-4">
             <button
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="p-2 bg-gray-300 rounded-lg"
+                className="p-2 px-4 border border-gray-300 rounded-lg flex items-center hover:bg-blue-500/25 hover:text-gray-700"
             >
-                Previous
+                <FiArrowLeft className="pr-2 w-6"/>Previous
             </button>
             <div className="flex space-x-2">
                 {pageNumbers.map(number => (
                     <button
                         key={number}
                         onClick={() => setCurrentPage(number)}
-                        className={`p-2 rounded-lg ${currentPage === number ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+                        className={`p-2 h-[40px] w-[40px] hover:bg-blue-500/10 hover:text-[#2A34D1]/80 rounded-lg ${currentPage === number ? 'bg-blue-500/25 text-[#2A34D1]' : 'bg-white text-gray-400'}`}
                     >
                         {number}
                     </button>
@@ -30,9 +31,9 @@ const Pagination = ({ currentPage, totalPages, setCurrentPage }) => {
             <button
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="p-2 bg-gray-300 rounded-lg"
+                className="p-2 px-4 border border-gray-300 rounded-lg flex items-center hover:bg-blue-500/25 hover:text-gray-700"
             >
-                Next
+                Next <FiArrowRight className='pl-2 w-6'/>
             </button>
         </div>
     );

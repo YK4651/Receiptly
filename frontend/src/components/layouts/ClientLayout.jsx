@@ -9,12 +9,12 @@ const ClientLayout = () => {
       <Sidebar className="min-h-screen" />
       
       {/* Main Content */}
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-col ml-[231px] pl-[1.5rem] flex-1">
         {/* Navbar */}
         <Navbar />
         
         {/* Main Content Area */}
-        <main className="p-6 flex-grow">
+        <main className="p-6 flex-grow bg-white">
           <Outlet />
         </main>
       </div>

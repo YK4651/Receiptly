@@ -1,77 +1,119 @@
-import { useState, useEffect } from "react";
-import { Bar, Line, Pie, Doughnut } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, PointElement, LineElement, ArcElement } from 'chart.js';
+import { useState } from "react";
+import {
+	Chart as ChartJS,
+	CategoryScale,
+	LinearScale,
+	BarElement,
+	Title,
+	Tooltip,
+	Legend,
+	PointElement,
+	LineElement,
+	ArcElement,
+} from "chart.js";
+import Menu from "./Menu";
+import LineChart from "./Charts/LineChart";
+import DoughnutChart from "./Charts/DoughnutChart";
+import GaugeChart from "./Charts/GaugeChart";
+import BarChart from "./Charts/BarChart";
+import HelpToolTip from "../../common/HelpToolTip";
+import FinancialMetrics from "./FinancialMetrics";
+import {
+	burnRateMessage,
+	runwayMessage,
+	grossMarginMessage,
+	revenueGrowthRateMessage,
+} from "../../common/ToolTipMessage";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, PointElement, LineElement, ArcElement);
+ChartJS.register(
+	CategoryScale,
+	LinearScale,
+	BarElement,
+	Title,
+	Tooltip,
+	Legend,
+	PointElement,
+	LineElement,
+	ArcElement
+);
 
 const Reports = () => {
-  const [chartData, setChartData] = useState(null);
+	const [selectedCategory, setSelectedCategory] = useState("Financial");
+	const [dateRange, setDateRange] = useState({ start: "", end: "" });
 
-  useEffect(() => {
-    // Comment out the API part and use dummy data
-    // const fetchData = async () => {
-    //   const response = await axios.get(`${API_BASE_URL}/receipts/reports`);
-    //   setChartData(response.data);
-    // };
+	const categoryCharts = {
+		Financial: [
+			{
+				title: "Burn Rate",
+				component: <LineChart />,
+				message: burnRateMessage(),
+			},
+			{ title: "Runway", component: <GaugeChart />, message: runwayMessage() },
+			{
+				title: "Gross Margin",
+				component: <DoughnutChart />,
+				message: grossMarginMessage(),
+			},
+			{
+				title: "Revenue Growth Rate",
+				component: <BarChart />,
+				message: revenueGrowthRateMessage(),
+			},
+		],
+		"Customer & Market": [
+			{ title: "Customer Retention", component: <LineChart /> },
+			{ title: "Market Share", component: <DoughnutChart /> },
+		],
+		"Growth & Performance": [
+			{ title: "Yearly Growth", component: <BarChart /> },
+			{ title: "Profitability", component: <GaugeChart /> },
+		],
+		"Operational Efficiency": [
+			{ title: "Efficiency Score", component: <DoughnutChart /> },
+			{ title: "Operational Costs", component: <BarChart /> },
+		],
+		"Investor-Specific": [
+			{ title: "Valuation Trends", component: <LineChart /> },
+			{ title: "Funding Rounds", component: <BarChart /> },
+		],
+	};
 
-    // fetchData();
+	return (
+		<div className='bg-white py-4 pl-4'>
+			<h2 className='text-[24px] font-[700] mb-1'>Reports & Insights</h2>
+			<p className='text-[16px] font-[400] text-gray-500 mb-6'>
+				Track key metrics and gain insights to make smarter
+				<br />
+				financial decisions.
+			</p>
 
-    // Dummy data
-    const dummyData = {
-      labels: ["January", "February", "March", "April", "May", "June"],
-      datasets: [
-        {
-          label: "Receipts",
-          data: [12, 19, 3, 5, 2, 3],
-          backgroundColor: [
-            "rgba(75, 192, 192, 0.2)",
-            "rgba(54, 162, 235, 0.2)",
-            "rgba(255, 206, 86, 0.2)",
-            "rgba(75, 192, 192, 0.2)",
-            "rgba(153, 102, 255, 0.2)",
-            "rgba(255, 159, 64, 0.2)"
-          ],
-          borderColor: [
-            "rgba(75, 192, 192, 1)",
-            "rgba(54, 162, 235, 1)",
-            "rgba(255, 206, 86, 1)",
-            "rgba(75, 192, 192, 1)",
-            "rgba(153, 102, 255, 1)",
-            "rgba(255, 159, 64, 1)"
-          ],
-          borderWidth: 1,
-        },
-      ],
-    };
+			<Menu
+				selectedCategory={selectedCategory}
+				setSelectedCategory={setSelectedCategory}
+			/>
 
-    setChartData(dummyData);
-  }, []);
+			<FinancialMetrics onDateChange={setDateRange} />
 
-  return (
-    <div>
-      <h2 className="text-2xl mb-4">Reports</h2>
-      {chartData && (
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <h3 className="text-lg mb-2">Bar Chart</h3>
-            <Bar data={chartData} />
-          </div>
-          <div>
-            <h3 className="text-lg mb-2">Line Chart</h3>
-            <Line data={chartData} />
-          </div>
-          <div>
-            <h3 className="text-lg mb-2">Pie Chart</h3>
-            <Pie data={chartData} />
-          </div>
-          <div>
-            <h3 className="text-lg mb-2">Doughnut Chart</h3>
-            <Doughnut data={chartData} />
-          </div>
-        </div>
-      )}
-    </div>
-  );
+			<div id='report-container' className='p-4 bg-white w-full'>
+				<div className='grid grid-cols-2 gap-4'>
+					{categoryCharts[selectedCategory]?.map((chart, index) => (
+						<div
+							key={index}
+							className={`border border-gray-200 rounded-xl ${
+								chart.component.type === BarChart ? "col-span-2" : ""
+							} ${chart.component.type === LineChart ? "col-span-2" : ""}`}
+						>
+							<h3 className='text-md bg-gray-200/40 p-3 pl-6'>
+								<span className='align-[4px]'>{chart.title}</span>
+								<HelpToolTip message={`${chart.message}`} />
+							</h3>
+							<div className='px-4 py-8'>{chart.component}</div>
+						</div>
+					))}
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default Reports;

@@ -3,6 +3,7 @@ const vision = require('@google-cloud/vision');
 const axios = require('axios');
 const { Dropbox } = require('dropbox');
 
+
 // Get all receipts for a user
 exports.getReceipts = async (req, res) => {
   //return res.status(200).json({ message: req.user });
@@ -189,7 +190,7 @@ exports.saveReceipt = async (req, res) => {
       imageUrls: sharedLinks, // Save public URLs of Dropbox images
       createdAt: new Date(),
     });
-    await Receipt.deleteMany({ userId });
+    //await Receipt.deleteMany({ userId });
 
     const savedReceipt = await newReceipt.save();
     res.status(201).json({ savedReceipt, dropboxPaths: sharedLinks });
