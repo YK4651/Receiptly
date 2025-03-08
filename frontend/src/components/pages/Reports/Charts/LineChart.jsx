@@ -45,11 +45,12 @@ const LineChart = () => {
     }, []);
 
     const data = {
-        labels: burnRateData.map((item) => item.month),
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        // labels: burnRateData.map((item) => item.month),
         datasets: [
             {
                 label: "Burn Rate",
-                data: burnRateData.map((item) => item.grossBurn),
+                data: [543,392, 432, 345, 456, 543, 432, 543, 432, 345, 456, 543],
                 borderColor: "#8a42f5",
                 borderWidth: 2,
                 pointRadius: 0,
