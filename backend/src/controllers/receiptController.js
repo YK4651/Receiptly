@@ -1,30 +1,7 @@
 const Receipt = require('../models/Receipt');
 const vision = require('@google-cloud/vision');
-const client = new vision.ImageAnnotatorClient();
 const axios = require('axios');
 const { Dropbox } = require('dropbox');
-
-// Create a new receipt
-exports.createReceipt = async (req, res) => {
-  try {
-    const { userId, imageUrl, amount, vendor, receiptDate, tax, categoryId, tags } = req.body;
-    const newReceipt = new Receipt({
-      userId,
-      imageUrl,
-      amount,
-      vendor,
-      receiptDate,
-      tax,
-      categoryId,
-      tags,
-      createdAt: new Date(),
-    });
-    const savedReceipt = await newReceipt.save();
-    res.status(201).json(savedReceipt);
-  } catch (error) {
-    res.status(500).json({ message: 'Error creating receipt', error });
-  }
-};
 
 // Get all receipts for a user
 exports.getReceipts = async (req, res) => {
@@ -40,10 +17,26 @@ exports.getReceipts = async (req, res) => {
 // Update a receipt
 exports.updateReceipt = async (req, res) => {
   try {
-    const updatedReceipt = await Receipt.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!updatedReceipt) {
+    const { storeName, items, total, tax, totalTax, receiptCategory } = req.body;
+
+    // Find the existing receipt
+    const receipt = await Receipt.findById(req.params.id);
+    if (!receipt) {
       return res.status(404).json({ message: 'Receipt not found' });
     }
+
+    // Update the receiptData field
+    receipt.receiptData = [{
+      storeName,
+      items,
+      total,
+      tax,
+      totalTax,
+      receiptCategory
+    }];
+
+    // Save the updated receipt
+    const updatedReceipt = await receipt.save();
     res.status(200).json(updatedReceipt);
   } catch (error) {
     res.status(500).json({ message: 'Error updating receipt', error });
@@ -63,24 +56,11 @@ exports.getReceiptById = async (req, res) => {
   }
 };
 
-// Delete a receipt
-exports.deleteReceipt = async (req, res) => {
-  try {
-    const deletedReceipt = await Receipt.findByIdAndDelete(req.params.id);
-    if (!deletedReceipt) {
-      return res.status(404).json({ message: 'Receipt not found' });
-    }
-    res.status(200).json({ message: 'Receipt deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error deleting receipt', error });
-  }
-};
-
 exports.analyzeReceipt = async (req, res) => {
   try {
     const { images } = req.body; // Expecting an array of base64 images
-    const visionApiKey = 'AIzaSyCvTWSom948Q8IO-9zg9jvSG6Zc0g1SMIs';
-    const openAiApiKey = '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';
+    const visionApiKey = process.env.GOOGLE_VISION_API_KEY;
+    const openAiApiKey = process.env.OPENAI_API_KEY;
 
     // Step 1: Detect text using Google Vision API for each image
     const visionRequests = images.map(image => axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${visionApiKey}`, {
@@ -95,10 +75,10 @@ exports.analyzeReceipt = async (req, res) => {
         'Content-Type': 'application/json',
       },
     }));
-
+    
     // Execute all vision requests in parallel
     const visionResponses = await Promise.all(visionRequests);
-
+    
     // Step 2: Categorize detected text using OpenAI API for each vision response
     const openAiRequests = visionResponses.map(visionResponse => {
       const visionResult = visionResponse.data;
@@ -115,7 +95,7 @@ exports.analyzeReceipt = async (req, res) => {
         messages: [
           {
             role: 'system',
-            content: 'You are a helpful assistant for organizing receipt data. Extract the receipt details into the following fields: "Store Name", "Items", "Total", "Receipt Category", and "Subcategory". Provide output as a JSON object.',
+            content: 'You are a helpful assistant for organizing receipt data. Extract the receipt details into the following fields: "Store Name", "Items", "Total", "Tax", "Total Tax", "Receipt Category". If you cannot find fields, value should be undefined. Provide output as a JSON object.',
           },
           {
             role: 'user',
@@ -129,10 +109,10 @@ exports.analyzeReceipt = async (req, res) => {
         },
       });
     });
-
+    
     // Execute all OpenAI requests in parallel
     const openAiResponses = await Promise.all(openAiRequests);
-
+    
     // Process OpenAI responses
     const results = openAiResponses.map(openAiResponse => {
       const openAiResult = openAiResponse.data;
@@ -143,7 +123,10 @@ exports.analyzeReceipt = async (req, res) => {
       let organizedData = openAiResult.choices[0].message.content;
       const jsonStartIndex = organizedData.indexOf('{');
       const jsonEndIndex = organizedData.lastIndexOf('}') + 1;
-      const jsonString = organizedData.substring(jsonStartIndex, jsonEndIndex);
+      let jsonString = organizedData.substring(jsonStartIndex, jsonEndIndex);
+
+      // Replace undefined values with null
+      jsonString = jsonString.replace(/undefined/g, 'null');
 
       try {
         const jsonData = JSON.parse(jsonString);
@@ -151,6 +134,8 @@ exports.analyzeReceipt = async (req, res) => {
           storeName: jsonData['Store Name'],
           items: jsonData['Items'],
           total: jsonData['Total'],
+          tax: jsonData['Tax'],
+          totalTax: jsonData['Total Tax'],
           receiptCategory: jsonData['Receipt Category'],
           subcategory: jsonData['Subcategory'],
         };
@@ -184,7 +169,7 @@ exports.saveReceipt = async (req, res) => {
       });
       return { path: response.result.path_display, filename };
     }));
-
+    
     // Step 2: Create shared links for the uploaded images
     const sharedLinks = await Promise.all(dropboxResponses.map(async (file) => {
       const sharedLinkResponse = await dbx.sharingCreateSharedLinkWithSettings({
@@ -195,7 +180,7 @@ exports.saveReceipt = async (req, res) => {
       });
       return sharedLinkResponse.result.url.replace('?dl=0', '?raw=1'); // Convert to direct download link
     }));
-
+    
     // Step 3: Save receipt data to the database
     const newReceipt = new Receipt({
       userId: userId,
@@ -204,7 +189,7 @@ exports.saveReceipt = async (req, res) => {
       imageUrls: sharedLinks, // Save public URLs of Dropbox images
       createdAt: new Date(),
     });
-    //await Receipt.deleteMany({ userId });
+    await Receipt.deleteMany({ userId });
 
     const savedReceipt = await newReceipt.save();
     res.status(201).json({ savedReceipt, dropboxPaths: sharedLinks });
@@ -212,3 +197,4 @@ exports.saveReceipt = async (req, res) => {
     res.status(500).json({ message: 'Error saving receipt', error });
   }
 };
+

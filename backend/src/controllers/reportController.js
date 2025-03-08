@@ -4,28 +4,28 @@ const Receipt = require('../models/Receipt');
 
 const generateReport = async (req, res) => {
   try {
-    const token = req.headers.authorization?.split(' ')[1];
+    // Extract JWT token from request headers
+    const token = req.headers.authorization?.split(' ')[1]; // Expecting "Bearer <token>"
     if (!token) {
       return res.status(401).json({ message: 'Unauthorized: No token provided' });
     }
 
+    // Verify and decode the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decoded.id;
+    const userId = decoded.id; // Assuming JWT payload contains { id: userId }
 
+    // Fetch receipts for the authenticated user
     const receipts = await Receipt.find({ userId });
 
     let revenue = 0, expenses = 0, inflows = 0, outflows = 0;
-    const categorizedBurnRateData = {};
 
     receipts.forEach(receipt => {
+      //res.status(200).json({ message: 'Receipts found', receipt });
       receipt.receiptData.forEach(data => {
         const total = parseFloat(data.total);
         if (isNaN(total)) {
           return res.status(400).json({ message: `Invalid receipt total: ${data.total}` });
         }
-
-        const date = new Date(data.date);
-        const month = date.toLocaleString("default", { month: "short" });
 
         if (data.receiptCategory === 'Retail') {
           revenue += total;
@@ -34,22 +34,12 @@ const generateReport = async (req, res) => {
           expenses += Math.abs(total);
           outflows += Math.abs(total);
         }
-
-        if (!categorizedBurnRateData[month]) {
-          categorizedBurnRateData[month] = 0;
-        }
-        categorizedBurnRateData[month] += Math.abs(total);
       });
     });
 
-    const burnRateData = Object.keys(categorizedBurnRateData).map(month => ({
-      month,
-      burnRate: categorizedBurnRateData[month]
-    }));
-
-    const grossBurn = 10;
+    const grossBurn = expenses;
     const netBurn = inflows - expenses;
-    const initialBalance = 1000;
+    const initialBalance = 1000; // Example starting balance
     const netCashFlow = inflows - outflows;
     const finalCashBalance = initialBalance + netCashFlow;
     const margin = (revenue > 0) ? (revenue - expenses) / revenue * 100 : 0;
@@ -57,8 +47,7 @@ const generateReport = async (req, res) => {
     const report = new Report({
       userId, grossBurn, netBurn, revenue, expenses,
       cashFlow: { initialBalance, cashInflows: inflows, cashOutflows: outflows, netCashFlow, finalCashBalance },
-      margin,
-      burnRateData
+      margin
     });
 
     await report.save();
