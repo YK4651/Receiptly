@@ -12,7 +12,7 @@ const Login = () => {
     try {
       await login(email, password);
       console.log("Login successful");
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login failed:", error);
       alert("Login failed");
