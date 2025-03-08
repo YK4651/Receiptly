@@ -5,7 +5,7 @@ import 'react-medium-image-zoom/dist/styles.css';
 import { updateReceipt } from '../../../api/receipts';
 
 const ViewReceipt = ({ receipt, onClose, onSave }) => {
-    const [editableReceipt, setEditableReceipt] = useState({ ...receipt.data });
+    const [editableReceipt, setEditableReceipt] = useState({ ...receipt.receiptData, items: receipt.receiptData.items || [] });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -59,7 +59,7 @@ const ViewReceipt = ({ receipt, onClose, onSave }) => {
                 <input 
                     type="text" 
                     name="storeName" 
-                    value={editableReceipt.storeName} 
+                    value={editableReceipt[0].storeName} 
                     onChange={handleChange} 
                     className="border p-2 rounded w-full"
                 />
@@ -69,7 +69,7 @@ const ViewReceipt = ({ receipt, onClose, onSave }) => {
                 <input 
                     type="text" 
                     name="receiptCategory" 
-                    value={editableReceipt.receiptCategory} 
+                    value={editableReceipt[0].receiptCategory} 
                     onChange={handleChange} 
                     className="border p-2 rounded w-full"
                 />
@@ -79,17 +79,18 @@ const ViewReceipt = ({ receipt, onClose, onSave }) => {
                 <input 
                     type="text" 
                     name="subcategory" 
-                    value={editableReceipt.subcategory} 
+                    value={editableReceipt[0].subcategory} 
                     onChange={handleChange} 
                     className="border p-2 rounded w-full"
                 />
             </div>
+            
             <div className="mb-4">
                 <label className="block font-bold">Total:</label>
                 <input 
                     type="text" 
                     name="total" 
-                    value={editableReceipt.total} 
+                    value={editableReceipt[0].total} 
                     onChange={handleChange} 
                     className="border p-2 rounded w-full"
                 />
@@ -106,33 +107,33 @@ const ViewReceipt = ({ receipt, onClose, onSave }) => {
             </div>
             <div className="mb-4">
                 <label className="block font-bold">Items:</label>
-                {editableReceipt.items.map((item, index) => (
+                {Array.isArray(editableReceipt.items) && editableReceipt.items.map((item, index) => (
                     <div key={index} className="mb-2">
-                    <div className="flex mb-2">
-                        <div className="flex-1 mr-2">
-                            <label className="block font-bold">Item Name:</label>
-                            <input 
-                                type="text" 
-                                name="Description" 
-                                value={item.Description} 
-                                onChange={(e) => handleItemChange(index, e)} 
-                                className="border p-2 rounded w-full"
-                                placeholder="Item Name"
-                            />
-                        </div>
-                        <div className="flex-1">
-                            <label className="block font-bold">Item Price:</label>
-                            <input 
-                                type="text" 
-                                name="Unit Price" 
-                                value={item["Unit Price"]} 
-                                onChange={(e) => handleItemChange(index, e)} 
-                                className="border p-2 rounded w-full"
-                                placeholder="Item Price"
-                            />
+                        <div className="flex mb-2">
+                            <div className="flex-1 mr-2">
+                                <label className="block font-bold">Item Name:</label>
+                                <input 
+                                    type="text" 
+                                    name="Description" 
+                                    value={item.Description} 
+                                    onChange={(e) => handleItemChange(index, e)} 
+                                    className="border p-2 rounded w-full"
+                                    placeholder="Item Name"
+                                />
+                            </div>
+                            <div className="flex-1">
+                                <label className="block font-bold">Item Price:</label>
+                                <input 
+                                    type="text" 
+                                    name="Unit Price" 
+                                    value={item["Unit Price"]} 
+                                    onChange={(e) => handleItemChange(index, e)} 
+                                    className="border p-2 rounded w-full"
+                                    placeholder="Item Price"
+                                />
+                            </div>
                         </div>
                     </div>
-                </div>
                 ))}
             </div>
             <div className="mb-4">
