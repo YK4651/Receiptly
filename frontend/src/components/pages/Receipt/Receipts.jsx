@@ -59,6 +59,7 @@ const Receipts = () => {
             receipt.receiptData &&
             receipt.receiptData.some(
                 (data) =>
+                    data.storeName && // Ensure storeName is not null
                     data.storeName.toLowerCase().includes(searchTerm.toLowerCase()) &&
                     (categoryFilter === "" || data.receiptCategory === categoryFilter) &&
                     (subcategoryFilter === "" || data.subcategory === subcategoryFilter)
