@@ -3,6 +3,59 @@ const vision = require('@google-cloud/vision');
 const axios = require('axios');
 const { Dropbox } = require('dropbox');
 
+// Get all receipts for a user
+exports.getReceipts = async (req, res) => {
+  //return res.status(200).json({ message: req.user });
+  try {
+    const receipts = await Receipt.find({ userId: req.user._id });
+    res.status(200).json(receipts);
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving receipts', error });
+  }
+};
+
+// Update a receipt
+exports.updateReceipt = async (req, res) => {
+  try {
+    const { storeName, items, total, tax, totalTax, receiptCategory } = req.body;
+
+    // Find the existing receipt
+    const receipt = await Receipt.findById(req.params.id);
+    if (!receipt) {
+      return res.status(404).json({ message: 'Receipt not found' });
+    }
+
+    // Update the receiptData field
+    receipt.receiptData = [{
+      storeName,
+      items,
+      total,
+      tax,
+      totalTax,
+      receiptCategory
+    }];
+
+    // Save the updated receipt
+    const updatedReceipt = await receipt.save();
+    res.status(200).json(updatedReceipt);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating receipt', error });
+  }
+};
+
+// Get a receipt by ID
+exports.getReceiptById = async (req, res) => {
+  try {
+    const receipt = await Receipt.findById(req.params.id);
+    if (!receipt) {
+      return res.status(404).json({ message: 'Receipt not found' });
+    }
+    res.status(200).json(receipt);
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving receipt', error });
+  }
+};
+
 exports.analyzeReceipt = async (req, res) => {
   try {
     const { images } = req.body; // Expecting an array of base64 images
