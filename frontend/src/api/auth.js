@@ -29,11 +29,15 @@ export const login = async (email, password) => {
   return data;
 };
 
-export const register = async (name, email, password) => {
+export const register = async (name, email, password, businessName, businessIndustry, country, businessAddress) => {
   const response = await axios.post(`${API_BASE_URL}/auth/register`, {
     name,
     email,
     password,
+    businessName,
+    businessIndustry,
+    country,
+    businessAddress,
   });
 
   if (response.status !== 201) {

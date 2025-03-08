@@ -4,24 +4,44 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    description: "The user's full name"
+    description: "The user's full name",
   },
   email: {
     type: String,
     required: true,
     unique: true,
-    description: "The user's email address"
+    description: "The user's email address",
   },
   passwordHash: {
     type: String,
     required: true,
-    description: "The hashed password of the user"
+    description: "The hashed password of the user",
   },
   createdAt: {
     type: Date,
     default: Date.now,
-    description: "When the user was created"
-  }
+    description: "When the user was created",
+  },
+  businessName: {
+    type: String,
+    required: true,
+    description: "The name of the business",
+  },
+  businessIndustry: {
+    type: String,
+    required: true,
+    description: "The field of the business",
+  },
+  country: {
+    type: String,
+    required: true,
+    description: "The country of the business",
+  },
+  businessAddress: {
+    type: String,
+    required: true,
+    description: "Where the business is located",
+  },
 });
 
 const User = mongoose.model('User', userSchema);
