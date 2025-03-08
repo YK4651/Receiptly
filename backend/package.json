@@ -20,11 +20,14 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^5.13.23",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "node": "^23.9.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "keywords": [],
+  "type": "commonjs"
 }
