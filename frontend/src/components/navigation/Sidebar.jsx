@@ -28,12 +28,12 @@ const Sidebar = () => {
           </li>
           <li>
             <Link to="/receipts" className="flex items-center space-x-2 text-gray-700 hover:text-blue-500">
-              <FiFileText /> <span>Receipts</span>
+              <FiFileText /> <span>Receipt Management</span>
             </Link>
           </li>
           <li>
-            <Link to="/expense-categorization" className="flex items-center space-x-2 text-gray-700 hover:text-blue-500">
-              <FiLayers /> <span>Expense Categorization</span>
+            <Link to="/reports" className="flex items-center space-x-2 text-gray-700 hover:text-blue-500">
+              <FiLayers /> <span>Reports & Insights</span>
             </Link>
           </li>
           <li>
