@@ -1,11 +1,15 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const bodyParser = require('body-parser'); // Add this line
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
 const connectDB = require('./config/db');
 
 // Import Routes
 const authRoutes = require('./routes/auth');
+const receiptRoutes = require('./routes/receipts');
+const reportRoutes = require('./routes/reports');
 
 // Load environment variables
 dotenv.config();
@@ -18,10 +22,16 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json()); // Add this line to parse JSON bodies
+// app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
+app.use(morgan('dev'));
 
 // Routes Middleware
 app.use('/api/auth', authRoutes);
+app.use('/api/receipts', receiptRoutes);
+app.use('/api/reports', reportRoutes);
 
 // Default Route
 app.get('/', (req, res) => {

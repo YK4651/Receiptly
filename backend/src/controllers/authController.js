@@ -4,7 +4,15 @@ const jwt = require('jsonwebtoken');
 
 // Register a new user
 exports.register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const {
+    name,
+    email,
+    password,
+    businessName,
+    businessIndustry,
+    country,
+    businessAddress,
+  } = req.body;
   try {
     const existingUser = await User.findOne({ email });
 
@@ -18,10 +26,18 @@ exports.register = async (req, res) => {
       email,
       passwordHash: hashedPassword,
       createdAt: new Date(),
+      businessName,
+      businessIndustry,
+      country,
+      businessAddress,
     });
 
     await user.save();
-    res.status(201).json({ message: 'User registered successfully' });
+
+    // Generate JWT token
+    const token = jwt.sign({ id: user._id, email: user.email, name: user.name }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    res.status(201).json({ token, userId: user._id, email: user.email, name: user.name });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
