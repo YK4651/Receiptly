@@ -1,4 +1,3 @@
-// src/components/pages/Receipt/Receipts.jsx
 import React, { useState, useEffect } from "react";
 import { CSVLink } from "react-csv";
 import Modal from "../../common/Modal";
@@ -9,6 +8,7 @@ import ReceiptFilter from "./ReceiptFilter";
 import ReceiptTable from "./ReceiptTable";
 import Pagination from "./Pagination";
 import UploadModal from "../../common/UploadModal";
+import ResultsTable from "../Receipt/ResultsTable"; // Import ResultsTable
 
 const Receipts = () => {
     const [receipts, setReceipts] = useState([]);
@@ -20,6 +20,7 @@ const Receipts = () => {
     const [selectedReceipts, setSelectedReceipts] = useState([]);
     const [selectedReceipt, setSelectedReceipt] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [analyzedData, setAnalyzedData] = useState(null); // State to store analyzed data
     const itemsPerPage = 10;
 
     useEffect(() => {
@@ -36,21 +37,22 @@ const Receipts = () => {
         getReceipts();
     }, []);
 
-    const handleFileChange = (files) => {
-        // Handle file change logic here
-        console.log("Files selected:", files);
+    const handleFileChange = (analyzedData) => {
+        // Handle the analyzed data here
+        setAnalyzedData(analyzedData); // Set the analyzed data
     };
 
     const uniqueCategories = [
         ...new Set(
             receipts.flatMap((receipt) =>
-                receipt.receiptData.map((data) => data.receiptCategory)
+                receipt.receiptData ? receipt.receiptData.map((data) => data.receiptCategory) : []
             )
         ),
     ];
 
     const filteredReceipts = receipts.filter(
         (receipt) =>
+            receipt.receiptData &&
             receipt.receiptData.some(
                 (data) =>
                     data.storeName.toLowerCase().includes(searchTerm.toLowerCase()) &&
@@ -82,7 +84,7 @@ const Receipts = () => {
     };
 
     const csvData = selectedReceipts.flatMap((receipt) =>
-        receipt.receiptData.map((data) => ({
+        receipt.receiptData ? receipt.receiptData.map((data) => ({
             storeName: data.storeName,
             receiptCategory: data.receiptCategory,
             subcategory: data.subcategory,
@@ -90,7 +92,7 @@ const Receipts = () => {
             createdAt: new Date(
                 receipt.createdAt.$date?.$numberLong || receipt.createdAt
             ).toLocaleDateString(),
-        }))
+        })) : []
     );
 
     const totalPages = Math.ceil(filteredReceipts.length / itemsPerPage);
@@ -116,7 +118,9 @@ const Receipts = () => {
                 <h2 className='text-2xl font-medium'>Receipt uploaded</h2>
                 <UploadModal handleFileChange={handleFileChange} />
             </div>
-
+            {analyzedData && (
+                <ResultsTable data={analyzedData} onUpdate={setAnalyzedData} />
+            )}
             <ReceiptFilter
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
@@ -163,6 +167,7 @@ const Receipts = () => {
                     />
                 </Modal>
             )}
+            
         </div>
     );
 };

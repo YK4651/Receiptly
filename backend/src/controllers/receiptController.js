@@ -190,7 +190,7 @@ exports.saveReceipt = async (req, res) => {
       imageUrls: sharedLinks, // Save public URLs of Dropbox images
       createdAt: new Date(),
     });
-    await Receipt.deleteMany({ userId });
+    //await Receipt.deleteMany({ userId });
 
     const savedReceipt = await newReceipt.save();
     res.status(201).json({ savedReceipt, dropboxPaths: sharedLinks });
