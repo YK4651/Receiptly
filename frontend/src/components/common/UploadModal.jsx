@@ -54,7 +54,6 @@ const UploadModal = ({ handleFileChange }) => {
       toast.error("Error compressing file.");
       setIsLoading(false);
     } finally {
-      setIsLoading(false);
       setProgress(100);
     }
   };
@@ -92,24 +91,13 @@ const UploadModal = ({ handleFileChange }) => {
 
       {isOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-lg p-6 shadow-lg w-96">
+          <div className="bg-white rounded-lg p-6 shadow-lg w-1/2">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">Upload a file</h2>
               <button onClick={toggleModal} className="text-gray-500 hover:text-gray-700">
                 <FiX className="w-5 h-5" />
               </button>
             </div>
-
-            <FileInput handleFileChange={handleFilesChange} isLoading={isLoading} fileNames={selectedFiles.map(file => file.name)} progress={progress} />
-
-            {showAnalyzeButton && (
-              <button
-                onClick={() => handleAnalyze(selectedFiles)}
-                className="bg-green-600 text-white text-sm font-light px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-green-700 transition mt-4"
-              >
-                Analyze receipt
-              </button>
-            )}
 
             {isLoading && (
               <div className="mt-4">
@@ -118,6 +106,21 @@ const UploadModal = ({ handleFileChange }) => {
                 <h4 className="text-center mt-4 text-gray-400">hang in there, we'll be done in a bit.</h4>
               </div>
             )}
+
+            {!isLoading && (
+              <FileInput handleFileChange={handleFilesChange} isLoading={isLoading} fileNames={selectedFiles.map(file => file.name)} progress={progress} />
+            )}
+
+            {showAnalyzeButton && !isLoading && (
+              <button
+                onClick={() => handleAnalyze(selectedFiles)}
+                className="bg-green-600 text-white text-sm font-light px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-green-700 transition mt-4"
+              >
+                Analyze receipt
+              </button>
+            )}
+
+            
           </div>
         </div>
       )}

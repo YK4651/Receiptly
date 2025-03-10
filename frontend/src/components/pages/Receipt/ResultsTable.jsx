@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FiChevronDown, FiChevronUp, FiEdit } from "react-icons/fi";
 
-const ResultsTable = ({ data, onUpdate }) => {
+const ResultsTable = ({ data, onUpdate, handleRemoveFile }) => {
   const [expandedSections, setExpandedSections] = useState({});
   const [editableData, setEditableData] = useState(data);
   const [isEditing, setIsEditing] = useState({});
@@ -23,7 +23,6 @@ const ResultsTable = ({ data, onUpdate }) => {
     updatedData.results[arrayIndex][key] = value;
     setEditableData(updatedData);
 
-    // Validate the input
     if (value.trim() === "") {
       setErrors((prev) => ({
         ...prev,
@@ -43,6 +42,13 @@ const ResultsTable = ({ data, onUpdate }) => {
       ...prev,
       [index]: !prev[index],
     }));
+  };
+
+  const handleRemove = (index) => {
+    const updatedData = { ...editableData };
+    updatedData.results.splice(index, 1);
+    setEditableData(updatedData);
+    handleRemoveFile(index);
   };
 
   return (
@@ -99,42 +105,50 @@ const ResultsTable = ({ data, onUpdate }) => {
                   </tbody>
                 </table>
               </div>
-              <div className="mb-4">
-                <h4 className="text-md font-semibold mb-2">Total</h4>
-                <input
-                  type="text"
-                  value={result.total}
-                  onChange={(e) => handleInputChange(arrayIndex, 'total', e.target.value)}
-                  className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                {errors[`${arrayIndex}-total`] && (
-                  <p className="text-red-500 text-xs mt-1">{errors[`${arrayIndex}-total`]}</p>
-                )}
+              <div className="mb-4 grid grid-cols-2 gap-4">
+                <div className="mb-4">
+                  <h4 className="text-md font-semibold mb-2">Total</h4>
+                  <input
+                    type="text"
+                    value={result.total}
+                    onChange={(e) => handleInputChange(arrayIndex, 'total', e.target.value)}
+                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  {errors[`${arrayIndex}-total`] && (
+                    <p className="text-red-500 text-xs mt-1">{errors[`${arrayIndex}-total`]}</p>
+                  )}
+                </div>
+                <div className="mb-4">
+                  <h4 className="text-md font-semibold mb-2">Tax</h4>
+                  <input
+                    type="text"
+                    value={result.totalTax}
+                    onChange={(e) => handleInputChange(arrayIndex, 'tax', e.target.value)}
+                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  {errors[`${arrayIndex}-tax`] && (
+                    <p className="text-red-500 text-xs mt-1">{errors[`${arrayIndex}-tax`]}</p>
+                  )}
+                </div>
+                <div className="mb-4 col-span-2">
+                  <h4 className="text-md font-semibold mb-2">Receipt Category</h4>
+                  <input
+                    type="text"
+                    value={result.receiptCategory}
+                    onChange={(e) => handleInputChange(arrayIndex, 'receiptCategory', e.target.value)}
+                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  {errors[`${arrayIndex}-receiptCategory`] && (
+                    <p className="text-red-500 text-xs mt-1">{errors[`${arrayIndex}-receiptCategory`]}</p>
+                  )}
+                </div>
               </div>
-              <div className="mb-4">
-                <h4 className="text-md font-semibold mb-2">Tax</h4>
-                <input
-                  type="text"
-                  value={result.totalTax}
-                  onChange={(e) => handleInputChange(arrayIndex, 'tax', e.target.value)}
-                  className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                {errors[`${arrayIndex}-tax`] && (
-                  <p className="text-red-500 text-xs mt-1">{errors[`${arrayIndex}-tax`]}</p>
-                )}
-              </div>
-              <div className="mb-4">
-                <h4 className="text-md font-semibold mb-2">Receipt Category</h4>
-                <input
-                  type="text"
-                  value={result.receiptCategory}
-                  onChange={(e) => handleInputChange(arrayIndex, 'receiptCategory', e.target.value)}
-                  className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                {errors[`${arrayIndex}-receiptCategory`] && (
-                  <p className="text-red-500 text-xs mt-1">{errors[`${arrayIndex}-receiptCategory`]}</p>
-                )}
-              </div>
+              {/* <button
+                onClick={() => handleRemove(arrayIndex)}
+                className="text-red-500 hover:text-red-700"
+              >
+                Remove
+              </button> */}
             </div>
           )}
         </div>
