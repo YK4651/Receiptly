@@ -1,11 +1,10 @@
-// src/components/pages/Receipt/ViewReceipt.jsx
 import React, { useState } from 'react';
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
 import { updateReceipt } from '../../../api/receipts';
 
 const ViewReceipt = ({ receipt, onClose, onSave }) => {
-    const [editableReceipt, setEditableReceipt] = useState({ ...receipt.receiptData, items: receipt.receiptData.items || [] });
+    const [editableReceipt, setEditableReceipt] = useState({ ...receipt.data, items: receipt.data.items || [] });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -41,9 +40,6 @@ const ViewReceipt = ({ receipt, onClose, onSave }) => {
     };
 
     const getFormattedDate = (date) => {
-        if (date && date.$date && date.$date.$numberLong) {
-            return new Date(date.$date.$numberLong).toISOString().split('T')[0];
-        }
         return new Date(date).toISOString().split('T')[0];
     };
 
@@ -59,7 +55,7 @@ const ViewReceipt = ({ receipt, onClose, onSave }) => {
                 <input 
                     type="text" 
                     name="storeName" 
-                    value={editableReceipt[0].storeName} 
+                    value={editableReceipt.storeName} 
                     onChange={handleChange} 
                     className="border p-2 rounded w-full"
                 />
@@ -69,7 +65,7 @@ const ViewReceipt = ({ receipt, onClose, onSave }) => {
                 <input 
                     type="text" 
                     name="receiptCategory" 
-                    value={editableReceipt[0].receiptCategory} 
+                    value={editableReceipt.receiptCategory} 
                     onChange={handleChange} 
                     className="border p-2 rounded w-full"
                 />
@@ -79,7 +75,7 @@ const ViewReceipt = ({ receipt, onClose, onSave }) => {
                 <input 
                     type="text" 
                     name="subcategory" 
-                    value={editableReceipt[0].subcategory} 
+                    value={editableReceipt.subcategory} 
                     onChange={handleChange} 
                     className="border p-2 rounded w-full"
                 />
@@ -90,7 +86,7 @@ const ViewReceipt = ({ receipt, onClose, onSave }) => {
                 <input 
                     type="text" 
                     name="total" 
-                    value={editableReceipt[0].total} 
+                    value={editableReceipt.total} 
                     onChange={handleChange} 
                     className="border p-2 rounded w-full"
                 />
@@ -107,31 +103,24 @@ const ViewReceipt = ({ receipt, onClose, onSave }) => {
             </div>
             <div className="mb-4">
                 <label className="block font-bold">Items:</label>
+                {console.log(receipt)}
+
                 {Array.isArray(editableReceipt.items) && editableReceipt.items.map((item, index) => (
                     <div key={index} className="mb-2">
                         <div className="flex mb-2">
-                            <div className="flex-1 mr-2">
-                                <label className="block font-bold">Item Name:</label>
-                                <input 
-                                    type="text" 
-                                    name="Description" 
-                                    value={item.Description} 
-                                    onChange={(e) => handleItemChange(index, e)} 
-                                    className="border p-2 rounded w-full"
-                                    placeholder="Item Name"
-                                />
-                            </div>
-                            <div className="flex-1">
-                                <label className="block font-bold">Item Price:</label>
-                                <input 
-                                    type="text" 
-                                    name="Unit Price" 
-                                    value={item["Unit Price"]} 
-                                    onChange={(e) => handleItemChange(index, e)} 
-                                    className="border p-2 rounded w-full"
-                                    placeholder="Item Price"
-                                />
-                            </div>
+                            {Object.keys(item).map((key) => (
+                                <div key={key} className="flex-1 mr-2">
+                                    <label className="block font-bold">{key.replace('_', ' ')}:</label>
+                                    <input 
+                                        type="text" 
+                                        name={key} 
+                                        value={item[key]} 
+                                        onChange={(e) => handleItemChange(index, e)} 
+                                        className="border p-2 rounded w-full"
+                                        placeholder={key.replace('_', ' ')}
+                                    />
+                                </div>
+                            ))}
                         </div>
                     </div>
                 ))}

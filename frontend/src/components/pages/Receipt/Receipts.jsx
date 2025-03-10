@@ -191,6 +191,7 @@ const Receipts = () => {
                     Export to CSV
                 </CSVLink>
             </div>
+            {console.log("Receipts:", selectedReceipt)}
             <ReceiptTable
                 paginatedReceipts={paginatedReceipts}
                 selectedReceipts={selectedReceipts}
@@ -219,7 +220,7 @@ const Receipts = () => {
             )}
             <Modal isOpen={isLoading} onClose={() => {}}>
                 <LoadingSpinner />
-                <h2 className="text-center text-xl mt-4">We're categorizing your receipts</h2>
+                <h2 className="text-center text-xl mt-4">We're processing your receipts</h2>
                 <h4 className="text-center mt-4 text-gray-400">hang in there, we'll be done in a bit.</h4>
             </Modal>
         </div>
