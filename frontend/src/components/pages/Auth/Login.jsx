@@ -30,7 +30,7 @@ const Login = () => {
   return (
     <div className="flex h-screen">
       <SideImage />
-      <div className="flex flex-col items-center h-screen bg-white w-1/2 overflow-y-scroll">
+      <div className="flex flex-col items-center h-screen bg-white w-1/2 overflow-y-scroll overflow-x-hidden">
         <div className="flex justify-end w-full">
           <p className="text-gray-500 mt-3 mr-[60px]">
             Don't have an account?{" "}
