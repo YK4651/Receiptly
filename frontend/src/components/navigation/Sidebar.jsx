@@ -5,6 +5,7 @@ import {
 	FiSettings,
 	FiSearch,
 	FiBarChart2,
+	FiUsers
 } from "react-icons/fi";
 import ReceiptlyLogo from "../../assets/Receiptly-White-Whole.svg";
 
@@ -15,6 +16,7 @@ const Sidebar = () => {
 		{ path: "/dashboard", label: "Dashboard", icon: <FiHome /> },
 		{ path: "/receipts", label: "Receipt Management", icon: <FiFileText /> },
 		{ path: "/reports", label: "Reports & Insights", icon: <FiBarChart2 /> },
+		{ path: "/teams", label: "Manage Team", icon: <FiUsers /> }, // Add this line
 		{ path: "/settings", label: "Account Settings", icon: <FiSettings /> },
 	];
 

@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Team = require('../models/Team');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -34,6 +35,14 @@ exports.register = async (req, res) => {
 
     await user.save();
 
+    // Create a new team for the user
+    const team = new Team({
+      name: `${businessName}'s Team`,
+      ownerId: user._id,
+      members: [user._id]
+    });
+    await team.save();
+
     // Generate JWT token
     const token = jwt.sign({ id: user._id, email: user.email, name: user.name }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
@@ -58,8 +67,11 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({ id: user._id, email: user.email, name: user.name  }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.status(200).json({ token, userId: user._id, email: user.email, name: user.name });
+    // Fetch the team associated with the user
+    const team = await Team.findOne({ ownerId: user._id });
+
+    const token = jwt.sign({ id: user._id, email: user.email, name: user.name, teamId: team._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.status(200).json({ token, userId: user._id, email: user.email, name: user.name, teamId: team._id });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
