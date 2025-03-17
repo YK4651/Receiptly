@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { inviteTeamMember, fetchTeamMembers } from "../../../api/teams";
-import { toast } from "react-toastify";
+import { inviteTeamMember, fetchTeamMembers, fetchPendingInvitations } from "../../../api/teams";
+import { ToastContainer, toast } from "react-toastify";
 
 const Teams = () => {
   const [email, setEmail] = useState("");
   const [team, setTeam] = useState(null);
+  const [pendingInvitations, setPendingInvitations] = useState([]);
 
   useEffect(() => {
     const getTeamMembers = async () => {
@@ -19,7 +20,18 @@ const Teams = () => {
       }
     };
 
+    const getPendingInvitations = async () => {
+      try {
+        const data = await fetchPendingInvitations();
+        setPendingInvitations(data);
+      } catch (error) {
+        console.error("Error fetching pending invitations:", error);
+        toast.error("Error fetching pending invitations");
+      }
+    };
+
     getTeamMembers();
+    getPendingInvitations();
   }, []);
 
   const handleInvite = async () => {
@@ -27,6 +39,9 @@ const Teams = () => {
       await inviteTeamMember(email);
       toast.success("Invitation sent successfully");
       setEmail("");
+      const data = await fetchPendingInvitations();
+      setPendingInvitations(data);
+      
     } catch (error) {
       console.error("Error sending invitation:", error);
       toast.error("Error sending invitation");
@@ -52,6 +67,18 @@ const Teams = () => {
           Send Invitation
         </button>
       </div>
+      {pendingInvitations.length > 0 && (
+        <div className="mb-4">
+          <h3 className="text-xl font-medium mb-2">Pending Invitations</h3>
+          <ul>
+            {pendingInvitations.map((invitation) => (
+              <li key={invitation._id} className="mb-2">
+                {invitation.email}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       {team && (
         <div>
           <h3 className="text-xl font-medium mb-2">Team Members</h3>
@@ -64,6 +91,7 @@ const Teams = () => {
           </ul>
         </div>
       )}
+      <ToastContainer />
     </div>
   );
 };

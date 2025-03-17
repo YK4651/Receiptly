@@ -6,17 +6,32 @@ const nodemailer = require('nodemailer');
 // Send an invitation
 exports.sendInvitation = async (req, res) => {
   try {
-    const { email, teamId } = req.body;
+    const { email, teamId, role, ownerId } = req.body;
     const team = await Team.findById(teamId);
     if (!team) {
       return res.status(404).json({ message: 'Team not found' });
     }
 
+    // Check if the user is already a member of the team
+    const user = await User.findOne({ email });
+    if (user && team.members.includes(user._id)) {
+      return res.status(400).json({ message: 'User is already a member of the team' });
+    }
+
+    // Check if an invitation already exists
+    const existingInvitation = await Invitation.findOne({ email, teamId, status: 'pending' });
+    if (existingInvitation) {
+      return res.status(400).json({ message: 'Invitation already exists' });
+    }
+
     const invitation = new Invitation({
       email,
       teamId,
-      invitedBy: req.user._id
+      invitedBy: ownerId,
+      status: 'pending',
+      role: role
     });
+    
     await invitation.save();
 
     // Send email
@@ -32,7 +47,7 @@ exports.sendInvitation = async (req, res) => {
       from: process.env.EMAIL_USER,
       to: email,
       subject: 'Team Invitation',
-      text: `You have been invited to join the team ${team.name}. Please click the link to accept the invitation: ${process.env.FRONTEND_URL}/accept-invitation/${invitation._id}`
+      text: `You have been invited to join the team ${team.name}. Please click the link to accept the invitation: ${process.env.FRONTEND_URL}/api/invitations/accept/${invitation._id}`
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -65,8 +80,21 @@ exports.acceptInvitation = async (req, res) => {
       await team.save();
     }
 
+    // Remove the invitation from the database
+    await Invitation.findByIdAndDelete(invitationId);
+
     res.status(200).json({ message: 'Invitation accepted', invitation });
   } catch (error) {
     res.status(500).json({ message: 'Error accepting invitation', error });
+  }
+};
+
+// Get pending invitations
+exports.getPendingInvitations = async (req, res) => {
+  try {
+    const pendingInvitations = await Invitation.find({ status: 'pending' });
+    res.status(200).json(pendingInvitations);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching pending invitations', error });
   }
 };

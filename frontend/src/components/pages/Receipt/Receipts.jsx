@@ -136,8 +136,9 @@ const Receipts = () => {
                 });
 
                 const images = await Promise.all(base64Images);
+                const teamId = localStorage.getItem("teamId");
 
-                await saveReceipt(JSON.stringify(analyzedData), images);
+                await saveReceipt(JSON.stringify(analyzedData), images, teamId);
                 // Clear everything after saving
                 setAnalyzedData(null);
                 toast.success("Receipt saved successfully!");

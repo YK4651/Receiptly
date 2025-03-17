@@ -18,6 +18,12 @@ const invitationSchema = new mongoose.Schema({
     required: true,
     description: "The user who sent the invitation"
   },
+  role: {
+    type: String,
+    enum: ['owner', 'admin', 'member'],
+    required: true,
+    description: "The role of the invited user"
+  },
   status: {
     type: String,
     enum: ['pending', 'accepted', 'declined'],
