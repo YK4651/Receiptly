@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Line } from "react-chartjs-2";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -31,9 +32,9 @@ const LineChart = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("/api/reports");
+                const response = await axios.get(`${API_BASE_URL}/reports`);
                 const report = response.data;
-                setBurnRateData(report.grossBurn || []);
+                setBurnRateData(report.total || []);
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching report data:", error);
