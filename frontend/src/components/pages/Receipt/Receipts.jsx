@@ -3,7 +3,7 @@ import { CSVLink } from "react-csv";
 import Modal from "../../common/Modal";
 import ViewReceipt from "./ViewReceipt";
 import { fetchReceipts, saveReceipt } from "../../../api/receipts";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import ReceiptFilter from "./ReceiptFilter";
 import ReceiptTable from "./ReceiptTable";
 import Pagination from "./Pagination";
@@ -229,6 +229,7 @@ const Receipts = () => {
                 <h2 className="text-center text-xl mt-4">We're processing your receipts</h2>
                 <h4 className="text-center mt-4 text-gray-400">hang in there, we'll be done in a bit.</h4>
             </Modal>
+            <ToastContainer />
         </div>
     );
 };
