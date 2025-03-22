@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import UploadIcon from "../../assets/upload-cloud.svg";
-import RemoveButton from "../../assets/RemoveButton.svg";
+import RemoveButton from "../../assets/removeButton.svg";
 import FileIcon from "../../assets/fileIcon.svg";
 import Button from "./Button";
 import CameraCapture from "../pages/Receipt/CameraCapture";
