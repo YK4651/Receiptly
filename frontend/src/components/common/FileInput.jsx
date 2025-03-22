@@ -67,7 +67,7 @@ const FileInput = ({ handleFileChange, isLoading, fileNames, progress }) => {
         <div className="mt-4">
           <ul className="space-y-2">
             {selectedFiles.map((file, index) => (
-              <li key={index} className="flex justify-between items-center">
+              <li key={index} className="flex justify-between items-center border border-gray-300 p-2 rounded-lg text-gray-500 mx-4">
                 <span className="text-gray-700">{file.name}</span>
                 <button
                   onClick={() => handleRemoveFile(index)}
@@ -78,19 +78,6 @@ const FileInput = ({ handleFileChange, isLoading, fileNames, progress }) => {
               </li>
             ))}
           </ul>
-        </div>
-      )}
-
-      {isLoading && (
-        <div className="mt-4">
-          <div className="w-full bg-gray-200 rounded-full">
-            <div
-              className="bg-blue-500 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
-              style={{ width: `${progress}%` }}
-            >
-              {progress}%
-            </div>
-          </div>
         </div>
       )}
     </div>

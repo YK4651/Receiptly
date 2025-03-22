@@ -7,6 +7,12 @@ const receiptSchema = new mongoose.Schema({
     required: true,
     description: "The ID of the user who owns this receipt"
   },
+  teamId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Team',
+    required: true,
+    description: "The ID of the team that created this receipt"
+  },
   receiptData: {
     type: Array,
     required: true,

@@ -38,7 +38,7 @@ const DateRangePicker = ({ startDate, setStartDate, endDate, setEndDate }) => {
   };
 
   return (
-    <div className="relative" ref={containerRef}>
+    <div className="" ref={containerRef}>
       {/* Button to Toggle Date Picker */}
       <button
         onClick={() => setIsOpen(!isOpen)}
