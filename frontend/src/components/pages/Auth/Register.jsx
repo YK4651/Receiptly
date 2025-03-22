@@ -13,8 +13,6 @@ const Register = () => {
   const [businessIndustry, setBusinessIndustry] = useState("");
   const [country, setCountry] = useState("");
   const [businessAddress, setBusinessAddress] = useState("");
-  // const [industorySelected, setIndustorySelected] = useState("");
-  // const [countrySelected, setCountrySelected] = useState("");
   const navigate = useNavigate();
 
   const handleRegister = async () => {
@@ -32,14 +30,6 @@ const Register = () => {
       handleRegister();
     }
   };
-
-  const handleIndustoryChange = (e) => {
-    setIndustorySelected(e.target.value);
-  }
-
-  const handleCountryChange = (e) => {
-    setCountrySelected(e.target.value);
-  }
 
   return (
     <div className="flex h-screen">
@@ -130,12 +120,12 @@ const Register = () => {
                 Business name
               </label>
               <input
-                type="businessName"
+                type="text"
                 id="businessName"
-                placeholder="Langara"
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value)}
                 className="shadow-xs appearance-none border border-gray-200 rounded w-[70%] py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline placeholder-gray-400"
+                placeholder="Langara"
               />
             </div>
             <div className="mb-4">
@@ -192,12 +182,12 @@ const Register = () => {
                 Business address
               </label>
               <input
-                type="businessAddress"
+                type="text"
                 id="businessAddress"
-                placeholder="Enter your business address"
                 value={businessAddress}
                 onChange={(e) => setBusinessAddress(e.target.value)}
                 className="shadow-xs appearance-none border border-gray-200 rounded w-[70%] py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline placeholder-gray-400"
+                placeholder="Enter your business address"
               />
             </div>
             <div>
