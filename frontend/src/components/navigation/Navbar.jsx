@@ -5,7 +5,7 @@ const Navbar = () => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white p-4 flex justify-between items-center  border-b border-gray-300">
+    <header className="bg-white p-4 pb-0 flex justify-between items-center border-gray-300">
       {/* Welcome Message */}
       <div className="pt-8 pb-8 pl-6">
         <h2 className="text-2xl font-semibold py-1 text-gray-700">Welcome Back, 

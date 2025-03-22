@@ -26,7 +26,7 @@ const Receipts = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [progress, setProgress] = useState(0);
     const itemsPerPage = 10;
-    const [showReceipt, setShowReceipt] = useState(false); 
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
     useEffect(() => {
         const getReceipts = async () => {
@@ -156,91 +156,80 @@ const Receipts = () => {
     };
 
     return (
-      <>
-        <h2 className="text-2xl font-medium">Receipt Management</h2>
-        <p className="text-[#98A2B3] mb-6">
-          Transform how you manage receitps track expenses, monitor key metrics
-          and gain the
-          <br></br> 
-          insights you need to grow your business
-        </p>
-        <div className="pt-6 pb-6 border border-gray-200 rounded-lg shadow-sm">
-          <div className="flex items-center justify-between pb-4 pr-6">
-            <h2 className="text-2xl font-medium pl-6">Receipt uploaded</h2>
-            <UploadModal handleFileChange={handleFileChange} />
-          </div>
-          {analyzedData && (
-            <>
-              <ResultsTable data={analyzedData} onUpdate={setAnalyzedData} />
-              <Button
-                className="mt-4 bg-gray-500"
-                onClick={handleSaveReceipt}
-                disabled={isLoading}
-              >
-                {isLoading ? "Saving..." : "Save Results"}
-              </Button>
-            </>
-          )}
-          <ReceiptFilter
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            categoryFilter={categoryFilter}
-            setCategoryFilter={setCategoryFilter}
-            startDate={startDate}
-            setStartDate={setStartDate}
-            endDate={endDate}
-            setEndDate={setEndDate}
-            uniqueCategories={uniqueCategories}
-          />
-          <div className="mt-4">
-            <CSVLink
-              data={csvData}
-              filename={"receipts.csv"}
-              className="p-2 bg-blue-500 text-white rounded-lg hidden"
-            >
-              Export to CSV
-            </CSVLink>
-          </div>
-          {console.log("Receipts:", selectedReceipt)}
-          <ReceiptTable
-            paginatedReceipts={paginatedReceipts}
-            selectedReceipts={selectedReceipts}
-            handleCheckboxChange={handleCheckboxChange}
-            handleSelectAll={handleSelectAll}
-            setSelectedReceipt={(receipt) => {
-                setSelectedReceipt(receipt);
-                setShowReceipt(true)}}
-            filteredReceipts={filteredReceipts}
-            handleSave={handleSave} // Pass the handleSave function
-          />
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            setCurrentPage={setCurrentPage}
-          />
-           {showReceipt && selectedReceipt && (
-          <div>
-            <ViewReceipt
-              receipt={selectedReceipt}
-              onClose={() => {
-                setSelectedReceipt(null);
-                setShowReceipt(false);
-              }}
-              onSave={handleSave}
+        <div className={`p-6 border border-gray-200 rounded-lg shadow-sm ${isUploadModalOpen ? 'hidden' : ''}`}>
+        <div className="flex items-center justify-between pb-4">
+            <h2 className='text-2xl font-medium'>Receipt uploaded</h2>
+            <UploadModal 
+                handleFileChange={handleFileChange} 
+                onOpen={() => setIsUploadModalOpen(true)}
+                onClose={() => setIsUploadModalOpen(false)}
             />
-          </div>
-        )}
-          <Modal isOpen={isLoading} onClose={() => {}}>
-            <LoadingSpinner />
-            <h2 className="text-center text-xl mt-4">
-              We're processing your receipts
-            </h2>
-            <h4 className="text-center mt-4 text-gray-400">
-              hang in there, we'll be done in a bit.
-            </h4>
-          </Modal>
         </div>
-      </>
+            {analyzedData && (
+                <>
+                    <ResultsTable data={analyzedData} onUpdate={setAnalyzedData} />
+                    <Button
+                        className="mt-4 bg-gray-500"
+                        onClick={handleSaveReceipt}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? "Saving..." : "Save Results"}
+                    </Button>
+                </>
+            )}
+            <ReceiptFilter
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                categoryFilter={categoryFilter}
+                setCategoryFilter={setCategoryFilter}
+                startDate={startDate}
+                setStartDate={setStartDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
+                uniqueCategories={uniqueCategories}
+            />
+            <div className='mt-4'>
+                <CSVLink
+                    data={csvData}
+                    filename={"receipts.csv"}
+                    className='p-2 bg-blue-500 text-white rounded-lg hidden'
+                >
+                    Export to CSV
+                </CSVLink>
+            </div>
+            {console.log("Receipts:", selectedReceipt)}
+            <ReceiptTable
+                paginatedReceipts={paginatedReceipts}
+                selectedReceipts={selectedReceipts}
+                handleCheckboxChange={handleCheckboxChange}
+                handleSelectAll={handleSelectAll}
+                setSelectedReceipt={setSelectedReceipt}
+                filteredReceipts={filteredReceipts}
+                handleSave={handleSave} // Pass the handleSave function
+            />
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                setCurrentPage={setCurrentPage}
+            />
+            {selectedReceipt && (
+                <Modal
+                    isOpen={!!selectedReceipt}
+                    onClose={() => setSelectedReceipt(null)}
+                >
+                    <ViewReceipt
+                        receipt={selectedReceipt}
+                        onClose={() => setSelectedReceipt(null)}
+                        onSave={handleSave}
+                    />
+                </Modal>
+            )}
+            <Modal isOpen={isLoading} onClose={() => {}}>
+                <LoadingSpinner />
+                <h2 className="text-center text-xl mt-4">We're processing your receipts</h2>
+                <h4 className="text-center mt-4 text-gray-400">hang in there, we'll be done in a bit.</h4>
+            </Modal>
+        </div>
     );
 };
 

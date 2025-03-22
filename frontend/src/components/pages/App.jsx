@@ -11,6 +11,7 @@ import ResultsTable from "../pages/Receipt/ResultsTable";
 import Reports from "../pages/Reports/Reports";
 import Modal from "../common/Modal";
 import * as pdfjsLib from "pdfjs-dist";
+import Dashboard from "./Dashboard";
 
 // Set the workerSrc for pdfjs-dist
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
@@ -162,46 +163,9 @@ async function renderToBase64(pdfPage) {
   };
 
   return (
-    <div className="p-4 flex flex-col items-center">
       <Routes>
-        <Route path="/" element={
-          <>
-            <FileInput handleFileChange={handleFileChange} isLoading={isLoading} fileNames={selectedFiles.map(file => file.name)} progress={progress} />
-            
-            {detectedText && <ResultsTable data={JSON.parse(detectedText)} onUpdate={setUpdatedData} />}
-            {selectedFiles.length > 0 && (
-              <div className="flex space-x-4">
-                {!detectedText && (
-                  <Button
-                    onClick={handleAnalyze}
-                    className={`mt-4 ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-gray-500"}`}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Detecting..." : "Scan Receipts"}
-                  </Button>
-                )}
-                {detectedText && (
-                  <Button
-                    className="mt-4 bg-gray-500"
-                    onClick={handleSaveReceipt}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Saving..." : "Save Results"}
-                  </Button>
-                )}
-              </div>
-            )}
-            <Modal isOpen={isLoading} onClose={() => {}}>
-              <LoadingSpinner />
-              <h2 className="text-center text-xl mt-4">We're categorizing your receipts</h2>
-              <h4 className="text-center mt-4 text-gray-400">hang in there, we'll be done in a bit.</h4>
-            </Modal>
-            <ToastContainer />
-          </>
-        } />
-        <Route path="/reports" element={<Reports />} />
+        <Route path="/" element={<Dashboard />} />
       </Routes>
-    </div>
   );
 };
 
