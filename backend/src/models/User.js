@@ -12,6 +12,16 @@ const userSchema = new mongoose.Schema({
     unique: true,
     description: "The user's email address",
   },
+  dateOfBirth: {
+    type: Date,
+    required: true,
+    description: "The user's date of birth", 
+  },
+  location: {
+    type: String,
+    required: true,
+    description: "The user's location",
+  },
   passwordHash: {
     type: String,
     required: true,
