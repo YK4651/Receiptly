@@ -104,7 +104,7 @@ exports.analyzeReceipt = async (req, res) => {
         messages: [
           {
             role: 'system',
-            content: 'You are a helpful assistant for organizing receipt data. Extract the receipt details into the following fields: "Store Name", "Items", "Total", "Tax", "Total Tax", "Receipt Category". If you cannot find fields, value should be undefined. Provide output as a JSON object.',
+            content: 'You are a helpful assistant for organizing receipt data. Extract the receipt details into the following fields: "Store Name", "Items", "Total", "Tax", "Total Tax", "Receipt Category". - The "Items" field should be an array of objects, where each object contains "name" and "price" properties. - If you cannot find any fields, their value should be undefined. Provide the output as a JSON object.',
           },
           {
             role: 'user',

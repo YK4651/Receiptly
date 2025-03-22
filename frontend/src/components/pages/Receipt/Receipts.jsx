@@ -26,6 +26,7 @@ const Receipts = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [progress, setProgress] = useState(0);
     const itemsPerPage = 10;
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
     useEffect(() => {
         const getReceipts = async () => {
@@ -155,11 +156,15 @@ const Receipts = () => {
     };
 
     return (
-        <div className='p-6 border border-gray-200 rounded-lg shadow-sm'>
-            <div className="flex items-center justify-between pb-4">
-                <h2 className='text-2xl font-medium'>Receipt uploaded</h2>
-                <UploadModal handleFileChange={handleFileChange} />
-            </div>
+        <div className={`p-6 border border-gray-200 rounded-lg shadow-sm ${isUploadModalOpen ? 'hidden' : ''}`}>
+        <div className="flex items-center justify-between pb-4">
+            <h2 className='text-2xl font-medium'>Receipt uploaded</h2>
+            <UploadModal 
+                handleFileChange={handleFileChange} 
+                onOpen={() => setIsUploadModalOpen(true)}
+                onClose={() => setIsUploadModalOpen(false)}
+            />
+        </div>
             {analyzedData && (
                 <>
                     <ResultsTable data={analyzedData} onUpdate={setAnalyzedData} />
