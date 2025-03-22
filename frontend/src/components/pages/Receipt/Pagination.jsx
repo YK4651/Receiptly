@@ -9,7 +9,7 @@ const Pagination = ({ currentPage, totalPages, setCurrentPage }) => {
     }
 
     return (
-        <div className="flex items-center justify-between border-t border-gray-200 mt-3 pt-4">
+        <div className="flex items-center justify-between border-t border-gray-200 mt-3 pt-4 pr-6 pl-6">
             <button
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
