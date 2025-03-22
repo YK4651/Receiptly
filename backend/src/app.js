@@ -14,6 +14,7 @@ const reportRoutes = require('./routes/reports');
 const notificationRoutes = require('./routes/notifications');
 const teamRoutes = require('./routes/teams');
 const invitationRoutes = require('./routes/invitations');
+const userRoutes = require('./routes/user');
 
 // Load environment variables
 dotenv.config();
@@ -39,6 +40,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/notifications', notificationRoutes);
 
+app.use('/api/users', userRoutes);
 app.use('/api/teams', teamRoutes);
 app.use('/api/invitations', invitationRoutes);
 
