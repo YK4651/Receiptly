@@ -1,8 +1,17 @@
 import { FiBell, FiChevronDown } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../api/auth";
 import { useState } from "react";
 
 const Navbar = () => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <header className="bg-white p-4 pb-0 flex justify-between items-center border-gray-300">
@@ -33,7 +42,9 @@ const Navbar = () => {
             <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg py-2">
               <button className="w-full text-left px-4 py-2 hover:bg-gray-100">Profile</button>
               <button className="w-full text-left px-4 py-2 hover:bg-gray-100">Settings</button>
-              <button className="w-full text-left px-4 py-2 hover:bg-gray-100">Logout</button>
+              <button className="w-full text-left px-4 py-2 hover:bg-gray-100" onClick={handleLogout}>
+                Logout
+              </button>
             </div>
           )}
         </div>

@@ -1,14 +1,23 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { login } from "../../../api/auth";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import SideImage from "./SideImage";
 import Logo from "../../../assets/Receiptly-Blue-Whole.svg";
+import { login } from "../../../api/auth";
 
 const Login = () => {
+  const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.state?.registered) {
+      toast.success("Registration successful! Please log in.");
+    }
+  }, [location.state]);
 
   const handleLogin = async () => {
     try {
@@ -50,6 +59,7 @@ const Login = () => {
             <h4 className="text-center py-2 mb-[20px]">
               Access your paperless, organized transactions—anytime, anywhere.
             </h4>
+
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -81,10 +91,6 @@ const Login = () => {
                 className="shadow-xs appearance-none border border-gray-200 rounded w-[70%] py-2 px-3 text-black mb-3 leading-tight focus:outline-none focus:shadow-outline placeholder-gray-400"
                 placeholder="password"
               />
-              <p>
-                Forgot your password?{" "}
-                <u className="text-[#2E39E6] cursor-pointer">Reset Password</u>
-              </p>
               <span
                 className="absolute right-40 top-9 text-sm text-blue-500 cursor-pointer"
                 onClick={() => setShowPassword(!showPassword)}
@@ -107,6 +113,7 @@ const Login = () => {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

@@ -14,12 +14,12 @@ const userSchema = new mongoose.Schema({
   },
   dateOfBirth: {
     type: Date,
-    required: true,
+    required: false,
     description: "The user's date of birth", 
   },
   location: {
     type: String,
-    required: true,
+    required: false,
     description: "The user's location",
   },
   passwordHash: {

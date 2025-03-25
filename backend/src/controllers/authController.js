@@ -48,7 +48,7 @@ exports.register = async (req, res) => {
 
     res.status(201).json({ token, userId: user._id, email: user.email, name: user.name });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error', error: error });
   }
 };
 

@@ -18,7 +18,7 @@ const Register = () => {
   const handleRegister = async () => {
     try {
       await register(name, email, password, businessName, businessIndustry, country, businessAddress);
-      navigate("/login");
+      navigate("/login", { state: { registered: true } });
     } catch (error) {
       console.error("Registration failed:", error);
       alert("Registration failed");
