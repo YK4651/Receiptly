@@ -68,7 +68,7 @@ const Sidebar = () => {
 			</div>
 
 			{/* User Info */}
-			<div className='mt-auto flex items-center space-x-3 border-t border-gray-600 pt-5 pb-1'>
+			{/* <div className='mt-auto flex items-center space-x-3 border-t border-gray-600 pt-5 pb-1'>
 				<svg
 					xmlns='http://www.w3.org/2000/svg'
 					fill='none'
@@ -92,7 +92,7 @@ const Sidebar = () => {
 						{localStorage.getItem("email")}
 					</p>
 				</div>
-			</div>
+			</div> */}
 		</aside>
 	);
 };
