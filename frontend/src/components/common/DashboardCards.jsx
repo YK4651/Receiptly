@@ -1,10 +1,13 @@
 import React from "react";
 import { ArrowUpRight } from "lucide-react";
+import cash from "../../assets/cash.svg";
+import ticket from "../../assets/ticket.svg";
+import user from "../../assets/user.svg";
 
 const DashboardCards = () => {
   const cards = [
     {
-      icon: "👤",
+      icon:  <img src={user} alt="Total Users Icon" className="w-10 h-10" />,
       title: "Total Users",
       value: "980",
       subInfo: [
@@ -13,14 +16,14 @@ const DashboardCards = () => {
       ],
     },
     {
-      icon: "📄",
+      icon:  <img src={ticket} alt="Total Users Icon" className="w-10 h-10" />,
       title: "Total Receipts Processed",
       value: "10,000/month",
       trend: "+6.8%",
       trendColor: "text-green-500",
     },
     {
-      icon: "💰",
+      icon: <img src={cash} alt="Total Users Icon" className="w-10 h-10" />,
       title: "Total Expenses Tracked",
       value: "$15,000",
       subInfo: [{ label: "Compared to (20 receipts last month)" }],
