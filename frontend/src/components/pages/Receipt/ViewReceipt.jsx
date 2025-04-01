@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { updateReceipt } from '../../../api/receipts';
 
 const ViewReceipt = ({ receipt, onClose, onSave }) => {
@@ -32,9 +34,11 @@ const ViewReceipt = ({ receipt, onClose, onSave }) => {
             await updateReceipt(receipt._id, editableReceipt);
             console.log('Updated receipt:', editableReceipt);
             onSave(receipt._id, editableReceipt); // Call the onSave function
+            toast.success('Receipt updated successfully!');
             onClose();
         } catch (error) {
             console.error('Error updating receipt:', error);
+            toast.error('Error updating receipt');
             alert('Error updating receipt');
         }
     };
@@ -120,7 +124,7 @@ const ViewReceipt = ({ receipt, onClose, onSave }) => {
             onClick={handleSave}
             className="p-2 bg-[#2E39E6] cursor-pointer text-white rounded-lg"
           >
-            Save
+            Save Changes
           </button>
         </div>
       </div>

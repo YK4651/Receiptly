@@ -20,9 +20,16 @@ const ResultsTable = ({ data, onUpdate, handleRemoveFile }) => {
 
   const handleInputChange = (arrayIndex, key, value) => {
     const updatedData = { ...editableData };
-    updatedData.results[arrayIndex][key] = value;
+  
+    if (key.startsWith('items.')) {
+      const [_, itemIndex, itemKey] = key.split('.');
+      updatedData.results[arrayIndex].items[itemIndex][itemKey] = value;
+    } else {
+      updatedData.results[arrayIndex][key] = value;
+    }
+  
     setEditableData(updatedData);
-
+  
     if (value.trim() === "") {
       setErrors((prev) => ({
         ...prev,
@@ -72,6 +79,18 @@ const ResultsTable = ({ data, onUpdate, handleRemoveFile }) => {
           </div>
           {expandedSections[arrayIndex] && (
             <div className="mt-2 bg-white p-4">
+              <div className="mb-4 col-span-2">
+                <h4 className="text-md font-semibold mb-2">Receipt Category</h4>
+                <input
+                  type="text"
+                  value={result.receiptCategory}
+                  onChange={(e) => handleInputChange(arrayIndex, 'receiptCategory', e.target.value)}
+                  className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                {errors[`${arrayIndex}-receiptCategory`] && (
+                  <p className="text-red-500 text-xs mt-1">{errors[`${arrayIndex}-receiptCategory`]}</p>
+                )}
+              </div>
               <div className="mb-4">
                 <h4 className="text-md font-semibold mb-2">Items</h4>
                 <table className="min-w-full bg-white border border-gray-200 rounded-lg">
@@ -128,18 +147,6 @@ const ResultsTable = ({ data, onUpdate, handleRemoveFile }) => {
                   />
                   {errors[`${arrayIndex}-tax`] && (
                     <p className="text-red-500 text-xs mt-1">{errors[`${arrayIndex}-tax`]}</p>
-                  )}
-                </div>
-                <div className="mb-4 col-span-2">
-                  <h4 className="text-md font-semibold mb-2">Receipt Category</h4>
-                  <input
-                    type="text"
-                    value={result.receiptCategory}
-                    onChange={(e) => handleInputChange(arrayIndex, 'receiptCategory', e.target.value)}
-                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  {errors[`${arrayIndex}-receiptCategory`] && (
-                    <p className="text-red-500 text-xs mt-1">{errors[`${arrayIndex}-receiptCategory`]}</p>
                   )}
                 </div>
               </div>

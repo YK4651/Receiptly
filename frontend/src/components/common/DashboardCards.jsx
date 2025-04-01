@@ -1,10 +1,11 @@
 import React from "react";
+import { FiUser, FiFileText, FiCreditCard } from "react-icons/fi"; // Import the new icons
 import { ArrowUpRight } from "lucide-react";
 
 const DashboardCards = () => {
   const cards = [
     {
-      icon: "👤",
+      icon: <FiUser className="bg-blue-100 p-2 rounded-full text-4xl" />,
       title: "Total Users",
       value: "980",
       subInfo: [
@@ -13,14 +14,14 @@ const DashboardCards = () => {
       ],
     },
     {
-      icon: "📄",
+      icon: <FiFileText className="bg-green-100 p-2 rounded-full text-4xl" />, // Use the receipt paper icon
       title: "Total Receipts Processed",
       value: "10,000/month",
       trend: "+6.8%",
       trendColor: "text-green-500",
     },
     {
-      icon: "💰",
+      icon: <FiCreditCard className="bg-yellow-100 p-2 rounded-full text-4xl" />, // Use the wallet icon
       title: "Total Expenses Tracked",
       value: "$15,000",
       subInfo: [{ label: "Compared to (20 receipts last month)" }],

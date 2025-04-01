@@ -62,7 +62,7 @@ const Teams = () => {
         />
         <button
           onClick={handleInvite}
-          className="p-2 bg-blue-500 text-white rounded-lg"
+          className="p-2 bg-[#2E39E6] text-white rounded-lg"
         >
           Send Invitation
         </button>

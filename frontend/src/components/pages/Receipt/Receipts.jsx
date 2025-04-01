@@ -3,6 +3,7 @@ import { CSVLink } from "react-csv";
 import Modal from "../../common/Modal";
 import ViewReceipt from "./ViewReceipt";
 import { fetchReceipts, saveReceipt } from "../../../api/receipts";
+import { createNotification } from "../../../api/notifications";
 import { ToastContainer, toast } from "react-toastify";
 import ReceiptFilter from "./ReceiptFilter";
 import ReceiptTable from "./ReceiptTable";
@@ -61,7 +62,8 @@ const Receipts = () => {
             receipt.receiptData.some(
                 (data) =>
                     data.storeName && // Ensure storeName is not null
-                    data.storeName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+                    (data.storeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                     data.receiptCategory.toLowerCase().includes(searchTerm.toLowerCase())) && // Match store name or category
                     (categoryFilter === "" || data.receiptCategory === categoryFilter) &&
                     (subcategoryFilter === "" || data.subcategory === subcategoryFilter)
             ) &&
@@ -140,6 +142,7 @@ const Receipts = () => {
                 const teamId = localStorage.getItem("teamId");
 
                 await saveReceipt(JSON.stringify(analyzedData), images, teamId);
+                await createNotification('Receipt saved successfully.');
                 // Clear everything after saving
                 setAnalyzedData(null);
                 toast.success("Receipt saved successfully!");
@@ -169,7 +172,7 @@ const Receipts = () => {
                 <>
                     <ResultsTable data={analyzedData} onUpdate={setAnalyzedData} />
                     <Button
-                        className="mt-4 bg-gray-500"
+                        className="mt-4 bg-[#2E39E6] text-white rounded-lg px-4 py-2"
                         onClick={handleSaveReceipt}
                         disabled={isLoading}
                     >
@@ -211,6 +214,7 @@ const Receipts = () => {
                 currentPage={currentPage}
                 totalPages={totalPages}
                 setCurrentPage={setCurrentPage}
+                totalItems={filteredReceipts.length}
             />
             {selectedReceipt && (
                 <Modal

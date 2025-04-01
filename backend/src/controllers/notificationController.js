@@ -3,6 +3,9 @@ const Notification = require('../models/Notification');
 // Create a new notification
 exports.createNotification = async (req, res) => {
   try {
+    if (!req.user) {
+      return res.status(400).json({ message: 'User not authenticated' });
+    }
     const notification = new Notification({
       userId: req.user._id,
       message: req.body.message,
@@ -11,7 +14,7 @@ exports.createNotification = async (req, res) => {
     await notification.save();
     res.status(201).json(notification);
   } catch (error) {
-    res.status(500).json({ message: 'Error creating notification', error });
+    res.status(500).json({ message: 'Error creating notification', error: error });
   }
 };
 
