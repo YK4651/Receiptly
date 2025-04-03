@@ -78,7 +78,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <div className="flex items-center justify-between pb-4">
+      <div className="flex items-center justify-between pb-0">
         {/* <span className="text-gray-600 text-lg">{currentDate}</span> */}
         <DateRangePicker />
         <Button
@@ -87,6 +87,7 @@ const Dashboard = () => {
             backgroundColor: "#2E39E6",
             border: "1px solid #2E39E6",
             marginBottom: "2rem",
+            marginTop: "2rem",
           }}
         >
           Upload New Receipt

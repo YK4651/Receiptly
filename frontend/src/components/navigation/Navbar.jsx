@@ -42,7 +42,7 @@ const Navbar = () => {
   return (
     <header className="bg-white p-4 flex flex-col md:flex-row justify-between items-center border-b border-gray-300">
       {/* Welcome Message */}
-      <div className="mb-4 md:mb-0">
+      <div className="mb-4 md:mb-0  hidden md:block">
         <h2 className="text-lg md:text-2xl font-semibold text-gray-700">
           Welcome Back, <span className="px-2">{localStorage.getItem("name")}</span>👋
         </h2>
