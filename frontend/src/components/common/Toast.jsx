@@ -10,8 +10,8 @@ const Toast = ({ type = "success", message, title, onClose }) => {
     setVisible(true);
     const timer = setTimeout(() => {
       setVisible(false);
-      setTimeout(onClose, 200);
-    }, 2000);
+      setTimeout(onClose, 1000);
+    }, 10000);
 
     return () => clearTimeout(timer);
   }, [onClose]);

@@ -81,17 +81,23 @@ const Dashboard = () => {
       <div className="flex items-center justify-between pb-0">
         {/* <span className="text-gray-600 text-lg">{currentDate}</span> */}
         <DateRangePicker />
-        <Button
-          to="/receipts"
-          style={{
-            backgroundColor: "#2E39E6",
-            border: "1px solid #2E39E6",
-            marginBottom: "2rem",
-            marginTop: "2rem",
-          }}
-        >
-          Upload New Receipt
-        </Button>
+        <Button to="/receipts" style={{
+          backgroundColor: "#2E39E6",
+          border: "1px solid #2E39E6",
+          marginBottom: "2rem",
+          float: "right",
+          transition: "all 0.3s ease"
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.backgroundColor = "transparent";
+          e.target.style.color = "#2E39E6";
+          e.target.style.borderColor = "#2E39E6";
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.backgroundColor = "#2E39E6";
+          e.target.style.color = "white"; 
+          e.target.style.borderColor = "#2E39E6";
+        }}>Upload New Receipt</Button>
       </div>
       {showGetStarted && (
         <GetStartedBanner
