@@ -132,13 +132,13 @@ const ViewReceipt = ({ receipt, onClose, onSave }) => {
         <div className="flex justify-end space-x-4">
           <button
             onClick={onClose}
-            className="p-2 bg-gray-500 text-white rounded-lg"
+            className="h-[44px] w-[135px] p-2 border border-[#9FA4F4] bg-[#9FA4F4] hover:bg-white hover:text-[#9FA4F4] cursor-pointer text-[#4B5565] transition duration-300 rounded-[8px]"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
-            className="p-2 bg-[#2E39E6] cursor-pointer text-white rounded-lg"
+            className="h-[44px] w-[135px] p-2 bg-[#2E39E6] cursor-pointer hover:bg-white hover:text-[#2E39E6] border cursor-pointer transition duration-300 text-white rounded-[8px]"
           >
             Save Changes
           </button>
