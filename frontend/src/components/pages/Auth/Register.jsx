@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { register } from "../../../api/auth";
 import SideImage from "./SideImage";
 import Logo from "../../../assets/Receiptly-Blue-Whole.svg";
+import Toast from "../../common/Toast";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -13,6 +14,7 @@ const Register = () => {
   const [businessIndustry, setBusinessIndustry] = useState("");
   const [country, setCountry] = useState("");
   const [businessAddress, setBusinessAddress] = useState("");
+  const [toast, setToast] = useState({ message: null, type: "success", title: null });
   const navigate = useNavigate();
 
   const handleRegister = async () => {
@@ -21,7 +23,11 @@ const Register = () => {
       navigate("/login", { state: { registered: true } });
     } catch (error) {
       console.error("Registration failed:", error);
-      alert("Registration failed");
+      setToast({
+        message: "Oops! Something went wrong. Please try again later",
+        type: "error",
+        title: "Registration Failed",
+    });
     }
   };
 
@@ -32,7 +38,15 @@ const Register = () => {
   };
 
   return (
-    <div className="flex h-screen justify-center w-full">
+    <div className="flex h-screen">
+      {toast.message && (
+        <Toast
+          type={toast.type}
+          message={toast.message}
+          title={toast.error || toast.title}
+          onClose={() => setToast({ ...toast, message: null })}
+        />
+      )}
       <SideImage />
       <div className="flex flex-col items-center h-screen bg-white md:w-1/2 overflow-y-auto overflow-x-hidden">
         <div className="flex justify-center md:justify-end w-full">
@@ -138,8 +152,8 @@ const Register = () => {
                 id="businessIndustry"
                 className={` ${
                   businessIndustry === "" ? "text-gray-400" : "text-black"
-                } ml-[1rem] shadow-xs appearance-none border border-gray-200 rounded w-[90%] md:w-[70%] py-2 px-3 leading-tight focus:outline-none focus:shadow-outline placeholder-gray-400`}
-                onChange={(e)=>setBusinessIndustry(e.target.value)}
+                } shadow-xs appearance-none border border-gray-200 rounded w-[70%] py-2 px-3 leading-tight focus:outline-none focus:shadow-outline placeholder-gray-400`}
+                onChange={(e) => setBusinessIndustry(e.target.value)}
                 value={businessIndustry}
               >
                 <option value="">Select an industry</option>
@@ -161,8 +175,8 @@ const Register = () => {
                 id="country"
                 className={` ${
                   country === "" ? "text-gray-400" : "text-black"
-                } ml-[1rem] shadow-xs appearance-none border border-gray-200 rounded w-[90%] md:w-[70%] py-2 px-3 leading-tight focus:outline-none focus:shadow-outline placeholder-gray-400`}
-                onChange={(e)=> setCountry(e.target.value)}
+                } shadow-xs appearance-none border border-gray-200 rounded w-[70%] py-2 px-3 leading-tight focus:outline-none focus:shadow-outline placeholder-gray-400`}
+                onChange={(e) => setCountry(e.target.value)}
                 value={country}
               >
                 <option value="">Select a country</option>

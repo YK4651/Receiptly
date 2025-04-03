@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import SideImage from "./SideImage";
 import Logo from "../../../assets/Receiptly-Blue-Whole.svg";
 import { login } from "../../../api/auth";
+import Toast from "../../common/Toast";
 
 const Login = () => {
   const location = useLocation();
@@ -12,10 +13,16 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const [toast, setToast] = useState({ message: null, type: "success", title: null });
 
   useEffect(() => {
     if (location.state?.registered) {
-      toast.success("Registration successful! Please log in.");
+      setToast({
+        message: "Please log in.",
+        type: "success",
+        title: "Registration successful!",
+    });
+
     }
   }, [location.state]);
 
@@ -26,7 +33,11 @@ const Login = () => {
       navigate("/dashboard");
     } catch (error) {
       console.error("Login failed:", error);
-      alert("Login failed");
+      setToast({
+        message: "Oops! Something went wrong. Please try again later",
+        type: "error",
+        title: "Login failed",
+    });
     }
   };
 
@@ -38,6 +49,14 @@ const Login = () => {
 
   return (
     <div className="flex h-screen">
+       {toast.message && (
+          <Toast
+             type={toast.type}
+             message={toast.message}
+             title={toast.error || toast.title}
+             onClose={() => setToast({ ...toast, message: null })}
+          />
+        )}
       <SideImage />
       <div className="flex flex-col items-center h-screen bg-white md:w-1/2 overflow-y-scroll overflow-x-hidden">
         <div className="flex justify-center md:justify-end w-full">
