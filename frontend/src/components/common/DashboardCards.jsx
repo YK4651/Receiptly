@@ -1,4 +1,5 @@
 import React from "react";
+import { FiUser, FiFileText, FiCreditCard } from "react-icons/fi"; // Import the new icons
 import { ArrowUpRight } from "lucide-react";
 import cash from "../../assets/cash.svg";
 import ticket from "../../assets/ticket.svg";

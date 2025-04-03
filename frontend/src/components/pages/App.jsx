@@ -165,6 +165,8 @@ async function renderToBase64(pdfPage) {
   return (
       <Routes>
         <Route path="/" element={<Dashboard />} />
+
+        <ToastContainer/>
       </Routes>
   );
 };

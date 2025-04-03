@@ -57,6 +57,7 @@ const DateRangePicker = ({ startDate, setStartDate, endDate, setEndDate }) => {
         <div
           ref={datePickerRef}
           className="absolute mt-2 bg-white/95 p-2 border border-gray-300 rounded-lg shadow-lg flex flex-col items-center"
+          style={{ zIndex: 1000 }}
         >
           <DatePicker
             selected={startDate}
