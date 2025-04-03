@@ -11,6 +11,15 @@ const ReceiptTable = ({
     setSelectedReceipt,
     filteredReceipts,
 }) => { 
+  const [expandedReceipt, setExpandedReceipt] = useState(null);
+
+  const toggleReceiptView = (receipt, dataIndex) => {
+    if (expandedReceipt && expandedReceipt.receipt === receipt && expandedReceipt.dataIndex === dataIndex) {
+      setExpandedReceipt(null);
+    } else {
+      setExpandedReceipt({ receipt, dataIndex });
+    }
+  };
     return (
       <table className="mt-6 w-full">
         <thead>
@@ -40,9 +49,10 @@ const ReceiptTable = ({
           </tr>
         </thead>
         <tbody>
-          {paginatedReceipts.map((receipt, index) =>
-            receipt.receiptData.map((data, dataIndex) => (
-              <tr key={`${index}-${dataIndex}`}>
+        {paginatedReceipts.map((receipt, index) =>
+          receipt.receiptData.map((data, dataIndex) => (
+            <React.Fragment key={`${index}-${dataIndex}`}>
+              <tr>
                 <td className="p-2 border-b border-[#EAECF0]">
                   <input
                     type="checkbox"
@@ -91,8 +101,27 @@ const ReceiptTable = ({
                   </button>
                 </td>
               </tr>
-            ))
-          )}
+              {expandedReceipt && expandedReceipt.receipt === receipt && expandedReceipt.dataIndex === dataIndex && (
+                <tr>
+                  <td colSpan="6" className="p-4 border-b border-[#EAECF0]">
+                    <ViewReceipt
+                      receipt={{
+                        ...receipt,
+                        data: receipt.receiptData[dataIndex],
+                        imageUrl: receipt.imageUrls[dataIndex],
+                      }}
+                      onClose={() => setExpandedReceipt(null)}
+                      onSave={(id, updatedReceipt) => {
+                        // Update the receipt data here
+                        setExpandedReceipt(null);
+                      }}
+                    />
+                  </td>
+                </tr>
+              )}
+            </React.Fragment>
+          ))
+        )}
         </tbody>
       </table>
     );

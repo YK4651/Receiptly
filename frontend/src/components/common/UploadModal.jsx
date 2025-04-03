@@ -5,6 +5,7 @@ import { analyzeReceipt } from "../../api/receipts";
 import { toast } from "react-toastify";
 import LoadingSpinner from "../common/LoadingSpinner";
 import Modal from "../common/Modal"; 
+import Toast from "../common/Toast";
 
 const UploadModal = ({ handleFileChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,7 +13,7 @@ const UploadModal = ({ handleFileChange }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [showAnalyzeButton, setShowAnalyzeButton] = useState(false);
-  const [error, setError] = useState(null);
+  const [toast, setToast] = useState({ message: null, type: "success", title: null });
 
   const toggleModal = () => setIsOpen(!isOpen);
 
@@ -53,7 +54,11 @@ const UploadModal = ({ handleFileChange }) => {
       }
     } catch (error) {
       console.error("Error compressing file:", error);
-      toast.error("Error compressing file.");
+      setToast({
+        message: "Error occured when compressing file. Please try again later",
+        type: "error",
+        title: error.message,
+    });
       setIsLoading(false);
     } finally {
       setProgress(100);
@@ -67,14 +72,18 @@ const UploadModal = ({ handleFileChange }) => {
       console.log("Result:", result.results);
       if (textAnnotations && textAnnotations.length > 0) {
         handleFileChange({ ...result, images: files }); // Pass the analyzed data and images back to Receipts.jsx
-        toast.success("Analysis completed successfully!");
+        // toast.success("Analysis completed successfully!");
       } else {
         toast.warn("Text not found in the images.");
       }
       setIsOpen(false); // Close the modal after successful analysis
     } catch (error) {
       console.error("Error:", error);
-      setError("An error occured during analysis.");
+      setToast({
+        message: "An error occured during analysis. Please try again later",
+        type: "error",
+        title: error.message,
+    });
     } finally {
       setIsLoading(false);
       setProgress(100);
@@ -126,18 +135,14 @@ const UploadModal = ({ handleFileChange }) => {
           </div>
         </div>
       )}
-      <Modal isOpen={!!error} onClose={() => setError(null)}>
-        <div className="p-4">
-          <h2 className="text-lg font-semibold">Error</h2>
-          <p>{error}</p>
-          <button
-            onClick={() => setError(null)}
-            className="mt-4 bg-red-500 text-white px-4 py-2 rounded"
-          >
-            Close
-          </button>
-        </div>
-      </Modal>
+       {toast.message && (
+          <Toast
+            type={toast.type}
+            message={toast.message}
+            title={toast.error || toast.title}
+            onClose={() => setToast({ ...toast, message: null })}
+          />
+        )}
     </div>
   );
 };

@@ -12,6 +12,7 @@ import UploadModal from "../../common/UploadModal";
 import ResultsTable from "../Receipt/ResultsTable"; // Import ResultsTable
 import Button from "../../common/Button"; // Import Button
 import LoadingSpinner from "../../common/LoadingSpinner"; // Import LoadingSpinner
+import Toast from "../../common/Toast";
 
 const Receipts = () => {
     const [receipts, setReceipts] = useState([]);
@@ -28,6 +29,7 @@ const Receipts = () => {
     const [progress, setProgress] = useState(0);
     const itemsPerPage = 10;
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+    const [toast, setToast] = useState({ message: null, type: "success", title: null });
 
     useEffect(() => {
         const getReceipts = async () => {
@@ -36,7 +38,11 @@ const Receipts = () => {
                 setReceipts(data);
             } catch (error) {
                 console.error("Error fetching receipts:", error);
-                toast.error("Error fetching receipts");
+                setToast({
+                    message: "Oops! Something went wrong. Please try again later",
+                    type: "error",
+                    title: error.message,
+                });
             }
         };
 
@@ -145,12 +151,21 @@ const Receipts = () => {
                 await createNotification('Receipt saved successfully.');
                 // Clear everything after saving
                 setAnalyzedData(null);
-                toast.success("Receipt saved successfully!");
+                setToast({
+                    message: "You successfully saved your receipts, we’ll take it from here.",
+                    type: "success",
+                    title: "Receipts successfully Saved!",
+                });
                 // Refresh the table data
                 const data = await fetchReceipts();
                 setReceipts(data);
             } catch (error) {
-                toast.error("Error saving receipt.");
+                setToast({
+                    message: "An error occured when saving receipt. Please try again later",
+                    type: "error",
+                    title: error.message,
+                });
+                // toast.error("Error saving receipt.");
             } finally {
                 setIsLoading(false);
                 setProgress(100);
@@ -162,6 +177,16 @@ const Receipts = () => {
         <div className={`p-6 border border-gray-200 rounded-lg shadow-sm ${isUploadModalOpen ? 'hidden' : ''}`}>
         <div className="flex items-center justify-between pb-4">
             <h2 className='text-2xl font-medium'>Receipt uploaded</h2>
+
+            {toast.message && (
+             <Toast
+                type={toast.type}
+                message={toast.message}
+                title={toast.error || toast.title}
+                onClose={() => setToast({ ...toast, message: null })}
+             />
+            )}
+
             <UploadModal 
                 handleFileChange={handleFileChange} 
                 onOpen={() => setIsUploadModalOpen(true)}
