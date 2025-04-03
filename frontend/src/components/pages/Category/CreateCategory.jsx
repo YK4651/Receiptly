@@ -1,13 +1,20 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { createCategory } from "../api/category";
+import Toast from "../../common/Toast";
 
 const CreateCategory = () => {
   const [categoryName, setCategoryName] = useState("");
+  const [toast, setToast] = useState({ message: null, type: "success", title: null });
+
 
   const handleCreateCategory = async () => {
     if (!categoryName) {
-      toast.error("Category name is required");
+      setToast({
+        message: "Please specify a category name.",
+        type: "error",
+        title: "Category name is required",
+    });
       return;
     }
 
@@ -21,12 +28,24 @@ const CreateCategory = () => {
       }
     } catch (error) {
       console.error("Error creating category:", error);
-      toast.error("Error creating category");
+      setToast({
+        message: "Oops! Something went wrong. Please try again later",
+        type: "error",
+        title: "Error creating category",
+      });
     }
   };
 
   return (
     <div className="p-4">
+       {toast.message && (
+          <Toast
+            type={toast.type}
+            message={toast.message}
+            title={toast.error || toast.title}
+            onClose={() => setToast({ ...toast, message: null })}
+          />
+        )}
       <h2 className="text-2xl mb-4">Create Category</h2>
       <div className="mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="categoryName">

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DateRangePicker from "../common/DateRangePicker";
 import { fetchReceipts } from "../../api/receipts";
-import { toast } from "react-toastify";
 import {
   Chart as ChartJS,
   CategoryScale,

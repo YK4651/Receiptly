@@ -63,16 +63,16 @@ const ResultsTable = ({ data, onUpdate, handleRemoveFile }) => {
       {editableData.results.map((result, arrayIndex) => (
         <div key={arrayIndex} className="mb-6 border border-gray-200 rounded-lg">
           <div
-            className="flex justify-between items-center p-4 bg-gray-100 cursor-pointer w-full"
+            className="flex justify-between items-center p-4 bg-white cursor-pointer w-full"
             onClick={() => toggleSection(arrayIndex)}
           >
             <div className="flex items-center space-x-2">
               <h3 className="text-sm font-semibold">{result.storeName}</h3>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="flex items-center justify-center bg-purple-200 px-2 py-1 rounded-lg">
-                <span className="mr-2">{result.receiptCategory}</span>
-                <FiEdit onClick={(e) => { e.stopPropagation(); toggleEditing(arrayIndex); }} className="cursor-pointer" />
+              <div className="flex items-center justify-center bg-[#F4F3FF] px-2 py-1 rounded-lg">
+                <span className="mr-2 text-[#5925DC]">{result.receiptCategory}</span>
+                <FiEdit onClick={(e) => { e.stopPropagation(); toggleEditing(arrayIndex); }} className="stroke-[#5925DC] cursor-pointer" />
               </div>
               {expandedSections[arrayIndex] ? <FiChevronUp /> : <FiChevronDown />}
             </div>

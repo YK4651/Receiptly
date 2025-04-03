@@ -4,9 +4,11 @@ import 'react-medium-image-zoom/dist/styles.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { updateReceipt } from '../../../api/receipts';
+import Toast from '../../common/Toast';
 
 const ViewReceipt = ({ receipt, onClose, onSave }) => {
     const [editableReceipt, setEditableReceipt] = useState({ ...receipt.data, items: receipt.data.items || [] });
+    const [toast, setToast] = useState({ message: null, type: "success", title: null });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -34,12 +36,19 @@ const ViewReceipt = ({ receipt, onClose, onSave }) => {
             await updateReceipt(receipt._id, editableReceipt);
             console.log('Updated receipt:', editableReceipt);
             onSave(receipt._id, editableReceipt); // Call the onSave function
-            toast.success('Receipt updated successfully!');
+            setToast({
+              message: "You successfully updated your receipts, we’ll take it from here.",
+              type: "success",
+              title: "Receipts updated successfully!",
+          });
             onClose();
         } catch (error) {
             console.error('Error updating receipt:', error);
-            toast.error('Error updating receipt');
-            alert('Error updating receipt');
+            setToast({
+              message: "Error updating receipt. Please try again later",
+              type: "error",
+              title: error.message,
+          });
         }
     };
 
@@ -55,7 +64,14 @@ const ViewReceipt = ({ receipt, onClose, onSave }) => {
       <div className="p-4">
         <div className="mb-4 ">
           {console.log(receipt)}
-
+          {toast.message && (
+            <Toast
+              type={toast.type}
+              message={toast.message}
+              title={toast.error || toast.title}
+              onClose={() => setToast({ ...toast, message: null })}
+            />
+          )}
           {Array.isArray(editableReceipt.items) &&
             editableReceipt.items.map((item, index) => (
               <div key={index} className="mb-4">

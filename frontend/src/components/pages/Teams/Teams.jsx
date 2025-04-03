@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { inviteTeamMember, fetchTeamMembers, fetchPendingInvitations } from "../../../api/teams";
 import { ToastContainer, toast } from "react-toastify";
+import Toast from "../../common/Toast";
 
 const Teams = () => {
   const [email, setEmail] = useState("");
   const [team, setTeam] = useState(null);
   const [pendingInvitations, setPendingInvitations] = useState([]);
+  const [toast, setToast] = useState({ message: null, type: "success", title: null });
 
   useEffect(() => {
     const getTeamMembers = async () => {
@@ -16,7 +18,11 @@ const Teams = () => {
         }
       } catch (error) {
         console.error("Error fetching team members:", error);
-        toast.error("Error fetching team members");
+        setToast({
+          message: "Error fetching team members. Please try again later",
+          type: "error",
+          title: error.message,
+      });
       }
     };
 
@@ -26,7 +32,11 @@ const Teams = () => {
         setPendingInvitations(data);
       } catch (error) {
         console.error("Error fetching pending invitations:", error);
-        toast.error("Error fetching pending invitations");
+        setToast({
+          message: "Error fetching pending invitations. Please try again later",
+          type: "error",
+          title: error.message,
+      });
       }
     };
 
@@ -44,12 +54,24 @@ const Teams = () => {
       
     } catch (error) {
       console.error("Error sending invitation:", error);
-      toast.error("Error sending invitation");
+      setToast({
+        message: "Error sending invitation. Please try again later",
+        type: "error",
+        title: error.message,
+    });
     }
   };
 
   return (
     <div className="p-6 border border-gray-200 rounded-lg shadow-sm">
+       {toast.message && (
+          <Toast
+            type={toast.type}
+            message={toast.message}
+            title={toast.error || toast.title}
+            onClose={() => setToast({ ...toast, message: null })}
+          />
+        )}
       <h2 className="text-2xl font-medium mb-4">Manage Team</h2>
       <div className="mb-4">
         <label className="block font-bold mb-2">Invite Team Member:</label>

@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import { FiMoreVertical } from "react-icons/fi";
 import ViewReceipt from "./ViewReceipt"; 
+import fileIcon from "../../../assets/fileIcon.svg";
 
 const ReceiptTable = ({
     paginatedReceipts,
@@ -26,7 +27,7 @@ const ReceiptTable = ({
             <th className="border-y h-15 border-[#EAECF0]">
               <input
                 type="checkbox"
-                className="w-4 h-4 focus:ring-gray-200 mr-7"
+                className="cursor-pointer w-4 h-4 focus:ring-gray-200 mr-7"
                 style={{ borderColor: "#D0D5DD" }}
                 checked={selectedReceipts.length === filteredReceipts.length}
                 onChange={handleSelectAll}
@@ -55,15 +56,16 @@ const ReceiptTable = ({
                 <td className="p-2 border-b border-[#EAECF0]">
                   <input
                     type="checkbox"
-                    className="w-4 h-4 focus:ring-gray-200 ml-6"
+                    className="cursor-pointer w-4 h-4 focus:ring-gray-200 ml-6"
                     checked={selectedReceipts.includes(receipt)}
                     onChange={() => handleCheckboxChange(receipt)}
                   />
                 </td>
                 <td className="p-2 h-20 border-y border-[#EAECF0]">
+                  <img src={fileIcon} alt="icon" className="w-[40px] h-[40px] inline-block mr-2 p-2 bg-[#EAEBFD] rounded-full" />
                   {data.storeName}
                 </td>
-                <td className={`p-2 border-y border-[#EAECF0] text-center`}>
+                <td className={`p-2 border-y border-[#EAECF0] text-left`}>
                   <span
                     className={`px-4 py-2 text-xs rounded-full ${
                       data.receiptCategory !== null
@@ -86,8 +88,14 @@ const ReceiptTable = ({
                 </td>
                 <td className="p-2 border-y text-center border-[#EAECF0]">
                   <button
-                    onClick={() => toggleReceiptView(receipt, dataIndex)}
-                    className="text-[#98A2B3]"
+                    onClick={() =>
+                      setSelectedReceipt({
+                        ...receipt,
+                        data: receipt.receiptData[dataIndex],
+                        imageUrl: receipt.imageUrls[dataIndex],
+                      })
+                    }
+                    className="cursor-pointer text-[#98A2B3]"
                   >
                     <FiMoreVertical />
                   </button>
