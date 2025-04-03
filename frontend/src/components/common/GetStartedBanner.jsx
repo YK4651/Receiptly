@@ -1,8 +1,10 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 const GetStartedBanner = ({ onSkip, onCompleteProfile }) => {
   return (
-    <div className="w-full bg-[#F5F5FF] p-5 rounded-lg flex justify-center mb-6">
+    showBanner && ( <div className="w-full bg-[#F5F5FF] p-5 rounded-lg flex justify-center mb-6">
       <div className="max-w-6xl w-full mx-auto flex flex-col md:flex-row items-center justify-between">
         <div className="text-left">
           <h2 className="text-xl font-bold text-[#1A1A1A]">
@@ -28,7 +30,7 @@ const GetStartedBanner = ({ onSkip, onCompleteProfile }) => {
           </div>
         </div>
       </div>
-    </div>
+    </div>)
   );
 };
 

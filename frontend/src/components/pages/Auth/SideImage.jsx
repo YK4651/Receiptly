@@ -4,7 +4,7 @@ import quote from "../../../assets/quote.svg"
 const SideImage = () => {
     return (
       <aside
-        className="w-1/2 bg-[#0B0F3B] shadow-md flex flex-col "
+        className="w-1/2 bg-[#0B0F3B] shadow-md flex flex-col hidden md:block"
         style={{
           backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.9)), url(${sideImage})`,
           backgroundSize: "cover",
