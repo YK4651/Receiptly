@@ -88,14 +88,8 @@ const ReceiptTable = ({
                 </td>
                 <td className="p-2 border-y text-center border-[#EAECF0]">
                   <button
-                    onClick={() =>
-                      setSelectedReceipt({
-                        ...receipt,
-                        data: receipt.receiptData[dataIndex],
-                        imageUrl: receipt.imageUrls[dataIndex],
-                      })
-                    }
-                    className="cursor-pointer text-[#98A2B3]"
+                    onClick={() => toggleReceiptView(receipt, dataIndex)}
+                    className="text-[#98A2B3] cursor-pointer"
                   >
                     <FiMoreVertical />
                   </button>

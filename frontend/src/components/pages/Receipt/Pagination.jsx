@@ -14,7 +14,7 @@ const Pagination = ({ currentPage, totalPages, setCurrentPage, totalItems }) => 
                 <button
                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
-                    className="cursor-pointer p-2 px-4 border border-gray-300 rounded-lg flex items-center hover:bg-blue-500/25 hover:text-gray-700"
+                    className="cursor-pointer p-2 px-4 border border-gray-300 rounded-lg flex items-center hover:bg-[#EAEBFD] hover:text-gray-700"
                 >
                     <FiArrowLeft className="pr-2 w-6" />Previous
                 </button>
@@ -34,7 +34,7 @@ const Pagination = ({ currentPage, totalPages, setCurrentPage, totalItems }) => 
                 <button
                     onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
-                    className="cursor-pointer p-2 px-4 border border-gray-300 rounded-lg flex items-center hover:bg-blue-500/25 hover:text-gray-700"
+                    className="cursor-pointer p-2 px-4 border border-gray-300 rounded-lg flex items-center hover:bg-[#EAEBFD] hover:text-gray-700"
                 >
                     Next <FiArrowRight className="pl-2 w-6" />
                 </button>
