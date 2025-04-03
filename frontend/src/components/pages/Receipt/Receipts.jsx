@@ -3,7 +3,6 @@ import { CSVLink } from "react-csv";
 import Modal from "../../common/Modal";
 import ViewReceipt from "./ViewReceipt";
 import { fetchReceipts, saveReceipt } from "../../../api/receipts";
-import { createNotification } from "../../../api/notifications";
 import { ToastContainer, toast } from "react-toastify";
 import ReceiptFilter from "./ReceiptFilter";
 import ReceiptTable from "./ReceiptTable";
