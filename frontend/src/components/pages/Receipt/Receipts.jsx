@@ -3,7 +3,8 @@ import { CSVLink } from "react-csv";
 import Modal from "../../common/Modal";
 import ViewReceipt from "./ViewReceipt";
 import { fetchReceipts, saveReceipt } from "../../../api/receipts";
-import { toast } from "react-toastify";
+import { createNotification } from "../../../api/notifications";
+import { ToastContainer, toast } from "react-toastify";
 import ReceiptFilter from "./ReceiptFilter";
 import ReceiptTable from "./ReceiptTable";
 import Pagination from "./Pagination";
@@ -11,6 +12,7 @@ import UploadModal from "../../common/UploadModal";
 import ResultsTable from "../Receipt/ResultsTable"; // Import ResultsTable
 import Button from "../../common/Button"; // Import Button
 import LoadingSpinner from "../../common/LoadingSpinner"; // Import LoadingSpinner
+import Toast from "../../common/Toast";
 
 const Receipts = () => {
     const [receipts, setReceipts] = useState([]);
@@ -26,6 +28,8 @@ const Receipts = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [progress, setProgress] = useState(0);
     const itemsPerPage = 10;
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+    const [toast, setToast] = useState({ message: null, type: "success", title: null });
 
     useEffect(() => {
         const getReceipts = async () => {
@@ -34,7 +38,11 @@ const Receipts = () => {
                 setReceipts(data);
             } catch (error) {
                 console.error("Error fetching receipts:", error);
-                toast.error("Error fetching receipts");
+                setToast({
+                    message: "Oops! Something went wrong. Please try again later",
+                    type: "error",
+                    title: error.message,
+                });
             }
         };
 
@@ -60,7 +68,8 @@ const Receipts = () => {
             receipt.receiptData.some(
                 (data) =>
                     data.storeName && // Ensure storeName is not null
-                    data.storeName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+                    (data.storeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                     data.receiptCategory.toLowerCase().includes(searchTerm.toLowerCase())) && // Match store name or category
                     (categoryFilter === "" || data.receiptCategory === categoryFilter) &&
                     (subcategoryFilter === "" || data.subcategory === subcategoryFilter)
             ) &&
@@ -136,16 +145,27 @@ const Receipts = () => {
                 });
 
                 const images = await Promise.all(base64Images);
+                const teamId = localStorage.getItem("teamId");
 
-                await saveReceipt(JSON.stringify(analyzedData), images);
+                await saveReceipt(JSON.stringify(analyzedData), images, teamId);
+                await createNotification('Receipt saved successfully.');
                 // Clear everything after saving
                 setAnalyzedData(null);
-                toast.success("Receipt saved successfully!");
+                setToast({
+                    message: "You successfully saved your receipts, we’ll take it from here.",
+                    type: "success",
+                    title: "Receipts successfully Saved!",
+                });
                 // Refresh the table data
                 const data = await fetchReceipts();
                 setReceipts(data);
             } catch (error) {
-                toast.error("Error saving receipt.");
+                setToast({
+                    message: "An error occured when saving receipt. Please try again later",
+                    type: "error",
+                    title: error.message,
+                });
+                // toast.error("Error saving receipt.");
             } finally {
                 setIsLoading(false);
                 setProgress(100);
@@ -154,22 +174,46 @@ const Receipts = () => {
     };
 
     return (
-        <div className='p-6 border border-gray-200 rounded-lg shadow-sm'>
-            <div className="flex items-center justify-between pb-4">
-                <h2 className='text-2xl font-medium'>Receipt uploaded</h2>
-                <UploadModal handleFileChange={handleFileChange} />
-            </div>
+        <div className={`p-6 border border-gray-200 rounded-lg shadow-sm ${isUploadModalOpen ? 'hidden' : ''}`}>
+        <div className="flex items-center justify-between pb-4">
+            <h2 className='text-2xl font-medium'>Receipt uploaded</h2>
+
+            {toast.message && (
+             <Toast
+                type={toast.type}
+                message={toast.message}
+                title={toast.error || toast.title}
+                onClose={() => setToast({ ...toast, message: null })}
+             />
+            )}
+
+            <UploadModal 
+                handleFileChange={handleFileChange} 
+                onOpen={() => setIsUploadModalOpen(true)}
+                onClose={() => setIsUploadModalOpen(false)}
+            />
+        </div>
             {analyzedData && (
-                <>
+                <div className="relative">
                     <ResultsTable data={analyzedData} onUpdate={setAnalyzedData} />
                     <Button
-                        className="mt-4 bg-gray-500"
+                        className="bg-[#2E39E6] text-white rounded-lg px-4 py-2 border cursor-pointer transition duration-300 absolute right-0"
                         onClick={handleSaveReceipt}
                         disabled={isLoading}
+                        onMouseEnter={(e) => {
+                            e.target.style.backgroundColor = "white";
+                            e.target.style.color = "#2E39E6";
+                            e.target.style.borderColor = "#2E39E6";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.backgroundColor = "#2E39E6";
+                            e.target.style.color = "white"; 
+                            e.target.style.borderColor = "#2E39E6";
+                          }}
                     >
                         {isLoading ? "Saving..." : "Save Results"}
                     </Button>
-                </>
+                </div>
             )}
             <ReceiptFilter
                 searchTerm={searchTerm}
@@ -191,6 +235,7 @@ const Receipts = () => {
                     Export to CSV
                 </CSVLink>
             </div>
+            {console.log("Receipts:", selectedReceipt)}
             <ReceiptTable
                 paginatedReceipts={paginatedReceipts}
                 selectedReceipts={selectedReceipts}
@@ -204,6 +249,7 @@ const Receipts = () => {
                 currentPage={currentPage}
                 totalPages={totalPages}
                 setCurrentPage={setCurrentPage}
+                totalItems={filteredReceipts.length}
             />
             {selectedReceipt && (
                 <Modal
@@ -219,9 +265,10 @@ const Receipts = () => {
             )}
             <Modal isOpen={isLoading} onClose={() => {}}>
                 <LoadingSpinner />
-                <h2 className="text-center text-xl mt-4">We're categorizing your receipts</h2>
+                <h2 className="text-center text-xl mt-4">We're processing your receipts</h2>
                 <h4 className="text-center mt-4 text-gray-400">hang in there, we'll be done in a bit.</h4>
             </Modal>
+            <ToastContainer />
         </div>
     );
 };

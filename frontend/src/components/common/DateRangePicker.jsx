@@ -38,11 +38,11 @@ const DateRangePicker = ({ startDate, setStartDate, endDate, setEndDate }) => {
   };
 
   return (
-    <div className="relative" ref={containerRef}>
+    <div className="" ref={containerRef}>
       {/* Button to Toggle Date Picker */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 border border-gray-300 px-4 py-2 rounded-lg bg-white text-gray-700 hover:bg-gray-100"
+        className="cursor-pointer flex items-center gap-2 border border-gray-300 px-4 py-3 mr-2 rounded-lg bg-white text-gray-700 hover:bg-gray-100"
       >
         <FiCalendar className="text-gray-500 w-5 h-5" />
         <span>
@@ -57,6 +57,7 @@ const DateRangePicker = ({ startDate, setStartDate, endDate, setEndDate }) => {
         <div
           ref={datePickerRef}
           className="absolute mt-2 bg-white/95 p-2 border border-gray-300 rounded-lg shadow-lg flex flex-col items-center"
+          style={{ zIndex: 1000 }}
         >
           <DatePicker
             selected={startDate}

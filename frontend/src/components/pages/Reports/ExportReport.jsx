@@ -1,6 +1,6 @@
 import jsPDF from "jspdf";
 import domtoimage from "dom-to-image";
-import { FiDownloadCloud } from "react-icons/fi";
+import { FiDownloadCloud, FiPlus } from "react-icons/fi";
 
 const ExportReport = () => {
 	const handleExportReport = () => {
@@ -50,15 +50,23 @@ const ExportReport = () => {
 			});
 	};
 
-    return (
-        <button
-            onClick={handleExportReport}
-            className='mx-2 px-3 py-2 bg-white text-xs text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-300 transition h-[40px] w-[150px] flex items-center justify-center'
-        >
-            <FiDownloadCloud className="h-5 w-5 mr-2"/>
-            <p className='text-[14px]'>Export Report</p>
-        </button>
-    );
+	return (
+		<div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+			<button
+				className='mx-2 px-3 py-2 bg-[#2E39E6] text-xs text-white rounded-lg hover:bg-primary-dark transition h-[40px] w-[150px] flex items-center justify-center'
+			>
+				<FiPlus className="h-6 w-6 mr-2 text-white"/>
+				<p className='text-[14px]'>Add More</p>
+			</button>
+			<button
+				onClick={handleExportReport}
+				className='mx-2 px-3 py-2 bg-white text-xs text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-300 transition h-[40px] w-[150px] flex items-center justify-center'
+			>
+				<FiDownloadCloud className="h-6 w-6 mr-2 text-gray-700"/>
+				<p className='text-[14px]'>Export Report</p>
+			</button>
+		</div>
+	);
 };
 
 export default ExportReport;

@@ -4,6 +4,8 @@ import FileInput from "../common/FileInput";
 import { analyzeReceipt } from "../../api/receipts";
 import { toast } from "react-toastify";
 import LoadingSpinner from "../common/LoadingSpinner";
+import Modal from "../common/Modal"; 
+import Toast from "../common/Toast";
 
 const UploadModal = ({ handleFileChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,6 +13,7 @@ const UploadModal = ({ handleFileChange }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [showAnalyzeButton, setShowAnalyzeButton] = useState(false);
+  const [toast, setToast] = useState({ message: null, type: "success", title: null });
 
   const toggleModal = () => setIsOpen(!isOpen);
 
@@ -51,10 +54,13 @@ const UploadModal = ({ handleFileChange }) => {
       }
     } catch (error) {
       console.error("Error compressing file:", error);
-      toast.error("Error compressing file.");
+      setToast({
+        message: "Error occured when compressing file. Please try again later",
+        type: "error",
+        title: error.message,
+    });
       setIsLoading(false);
     } finally {
-      setIsLoading(false);
       setProgress(100);
     }
   };
@@ -66,14 +72,18 @@ const UploadModal = ({ handleFileChange }) => {
       console.log("Result:", result.results);
       if (textAnnotations && textAnnotations.length > 0) {
         handleFileChange({ ...result, images: files }); // Pass the analyzed data and images back to Receipts.jsx
-        toast.success("Analysis completed successfully!");
+        // toast.success("Analysis completed successfully!");
       } else {
         toast.warn("Text not found in the images.");
       }
       setIsOpen(false); // Close the modal after successful analysis
     } catch (error) {
       console.error("Error:", error);
-      toast.error("Error during analysis.");
+      setToast({
+        message: "An error occured during analysis. Please try again later",
+        type: "error",
+        title: error.message,
+    });
     } finally {
       setIsLoading(false);
       setProgress(100);
@@ -81,35 +91,24 @@ const UploadModal = ({ handleFileChange }) => {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-left">
       <button
         onClick={toggleModal}
-        className="bg-blue-600 text-white text-sm font-light px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition"
+        className="bg-[#2E39E6] hover:bg-white hover:text-[#2E39E6] text-white text-sm font-light px-4 py-2 rounded-lg flex items-center gap-2 border cursor-pointer transition duration-300"
       >
         <FiUploadCloud className="w-5 h-5" />
         Upload receipt
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-lg p-6 shadow-lg w-96">
+        <div className="fixed inset-0 flex items-center justify-end items-start">
+          <div className="bg-white p-6 w-[82%] h-full max-h-[100vh] overflow-hidden flex flex-col">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">Upload a file</h2>
               <button onClick={toggleModal} className="text-gray-500 hover:text-gray-700">
                 <FiX className="w-5 h-5" />
               </button>
             </div>
-
-            <FileInput handleFileChange={handleFilesChange} isLoading={isLoading} fileNames={selectedFiles.map(file => file.name)} progress={progress} />
-
-            {showAnalyzeButton && (
-              <button
-                onClick={() => handleAnalyze(selectedFiles)}
-                className="bg-green-600 text-white text-sm font-light px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-green-700 transition mt-4"
-              >
-                Analyze receipt
-              </button>
-            )}
 
             {isLoading && (
               <div className="mt-4">
@@ -118,9 +117,32 @@ const UploadModal = ({ handleFileChange }) => {
                 <h4 className="text-center mt-4 text-gray-400">hang in there, we'll be done in a bit.</h4>
               </div>
             )}
+
+          <div className="overflow-y-auto flex-grow">
+          {!isLoading && (
+            <FileInput handleFileChange={handleFilesChange} isLoading={isLoading} fileNames={selectedFiles.map(file => file.name)} progress={progress} />
+          )}
+        </div>
+
+            {showAnalyzeButton && !isLoading && (
+              <button
+                onClick={() => handleAnalyze(selectedFiles)}
+                 className="bg-[#2E39E6] text-white text-sm px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-white hover:text-[#2E39E6] border cursor-pointer transition duration-300  mt-4 w-50 absolute right-5 bottom-5 text-center"
+              >
+                Analyze receipt
+              </button>
+            )}
           </div>
         </div>
       )}
+       {toast.message && (
+          <Toast
+            type={toast.type}
+            message={toast.message}
+            title={toast.error || toast.title}
+            onClose={() => setToast({ ...toast, message: null })}
+          />
+        )}
     </div>
   );
 };

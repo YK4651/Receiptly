@@ -24,13 +24,14 @@ export const analyzeReceipt = async (base64Images) => {
   return response.data;
 };
 
-export const saveReceipt = async (results, images) => {
+export const saveReceipt = async (results, images, teamId) => {
   const userId = localStorage.getItem("userId"); // Retrieve userId from local storage
   const token = localStorage.getItem("token"); // Retrieve token from local storage
 
   try {
     const response = await axios.post(`${API_BASE_URL}/receipts/saveReceipt`, {
       userId: userId,
+      teamId: teamId, // Include teamId in the request body
       results: JSON.parse(results).results,
       images,
     }, {

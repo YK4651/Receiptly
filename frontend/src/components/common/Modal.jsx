@@ -25,7 +25,7 @@ const Modal = ({ isOpen, onClose, children }) => {
       >
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 bg-gray-500 text-white rounded-full px-5 py-3"
+          className="absolute top-2 right-2 bg-transparent text-white rounded-full px-5 py-3"
         >
           &times;
         </button>

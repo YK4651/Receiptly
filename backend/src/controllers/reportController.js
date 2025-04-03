@@ -20,7 +20,6 @@ const generateReport = async (req, res) => {
     let revenue = 0, expenses = 0, inflows = 0, outflows = 0;
 
     receipts.forEach(receipt => {
-      //res.status(200).json({ message: 'Receipts found', receipt });
       receipt.receiptData.forEach(data => {
         const total = parseFloat(data.total);
         if (isNaN(total)) {
@@ -45,13 +44,22 @@ const generateReport = async (req, res) => {
     const margin = (revenue > 0) ? (revenue - expenses) / revenue * 100 : 0;
 
     const report = new Report({
-      userId, grossBurn, netBurn, revenue, expenses,
+      userId,
+      grossBurn,
+      netBurn,
+      revenue,
+      expenses,
       cashFlow: { initialBalance, cashInflows: inflows, cashOutflows: outflows, netCashFlow, finalCashBalance },
       margin
     });
 
+    // Save the new report
     await report.save();
-    res.json(report);
+
+    // Fetch all reports for the authenticated user, sorted by creation date (oldest first)
+    const reports = await Report.find({ userId }).sort({ createdAt: 1 });
+    
+    res.json(reports);
 
   } catch (err) {
     res.status(500).json({ message: 'Error generating report', error: err.message });

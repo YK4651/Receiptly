@@ -14,7 +14,7 @@ const ReceiptFilter = ({
 	uniqueCategories,
 }) => {
 	return (
-		<div className='flex justify-between space-x-4 mt-4'>
+		<div className='flex justify-between space-x-4 mt-20 mr-6 ml-6'>
 			<DateRangePicker
 				startDate={startDate}
 				setStartDate={setStartDate}
@@ -33,11 +33,11 @@ const ReceiptFilter = ({
 					/>
 				</div>
 				<select
-					className='border p-2 px-3 h-10 rounded-lg border-gray-300 text-gray-500'
+					className='cursor-pointer border p-2 px-3 h-10 rounded-lg border-gray-300 text-gray-500'
 					value={categoryFilter}
 					onChange={(e) => setCategoryFilter(e.target.value)}
 				>
-					<option value=''>All Categories</option>
+					<option value=''>Filter</option>
 					{uniqueCategories.map((category) => (
 						<option key={category} value={category}>
 							{category}
