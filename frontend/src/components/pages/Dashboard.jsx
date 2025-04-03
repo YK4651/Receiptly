@@ -109,11 +109,11 @@ const Dashboard = () => {
                 chart.component.type === BarChart ? "col-span-2" : ""
               } ${chart.component.type === LineChart ? "col-span-2" : ""}`}
             >
-              <h3 className='text-md bg-gray-200/40 p-3 pl-6'>
-                <span className='align-[4px]'>{chart.title}</span>
+              <h3 className="text-md bg-gray-200/40 p-3 pl-6">
+                <span className="align-[4px]">{chart.title}</span>
                 <HelpToolTip message={`${chart.message}`} />
               </h3>
-              <div className='px-4 py-8'>{chart.component}</div>
+              <div className="px-4 py-8">{chart.component}</div>
             </div>
           ))}
         </div>
