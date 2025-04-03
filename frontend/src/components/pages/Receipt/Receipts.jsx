@@ -169,16 +169,26 @@ const Receipts = () => {
             />
         </div>
             {analyzedData && (
-                <>
+                <div className="relative">
                     <ResultsTable data={analyzedData} onUpdate={setAnalyzedData} />
                     <Button
-                        className="mt-4 bg-[#2E39E6] text-white rounded-lg px-4 py-2"
+                        className="bg-[#2E39E6] text-white rounded-lg px-4 py-2 border cursor-pointer transition duration-300 absolute right-0"
                         onClick={handleSaveReceipt}
                         disabled={isLoading}
+                        onMouseEnter={(e) => {
+                            e.target.style.backgroundColor = "white";
+                            e.target.style.color = "#2E39E6";
+                            e.target.style.borderColor = "#2E39E6";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.backgroundColor = "#2E39E6";
+                            e.target.style.color = "white"; 
+                            e.target.style.borderColor = "#2E39E6";
+                          }}
                     >
                         {isLoading ? "Saving..." : "Save Results"}
                     </Button>
-                </>
+                </div>
             )}
             <ReceiptFilter
                 searchTerm={searchTerm}

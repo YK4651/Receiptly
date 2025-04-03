@@ -82,10 +82,10 @@ const UploadModal = ({ handleFileChange }) => {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-left">
       <button
         onClick={toggleModal}
-        className="bg-[#2E39E6] text-white text-sm font-light px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition"
+        className="bg-[#2E39E6] hover:bg-white hover:text-[#2E39E6] text-white text-sm font-light px-4 py-2 rounded-lg flex items-center gap-2 border cursor-pointer transition duration-300"
       >
         <FiUploadCloud className="w-5 h-5" />
         Upload receipt
@@ -118,7 +118,7 @@ const UploadModal = ({ handleFileChange }) => {
             {showAnalyzeButton && !isLoading && (
               <button
                 onClick={() => handleAnalyze(selectedFiles)}
-                 className="bg-[#2E39E6] text-white text-sm px-4 py-2 rounded-lg flex items-center gap-2 transition mt-4 w-50 absolute right-5 bottom-5 text-center"
+                 className="bg-[#2E39E6] text-white text-sm px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-white hover:text-[#2E39E6] border cursor-pointer transition duration-300  mt-4 w-50 absolute right-5 bottom-5 text-center"
               >
                 Analyze receipt
               </button>

@@ -14,7 +14,7 @@ const Pagination = ({ currentPage, totalPages, setCurrentPage, totalItems }) => 
                 <button
                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
-                    className="p-2 px-4 border border-gray-300 rounded-lg flex items-center hover:bg-blue-500/25 hover:text-gray-700"
+                    className="cursor-pointer p-2 px-4 border border-gray-300 rounded-lg flex items-center hover:bg-blue-500/25 hover:text-gray-700"
                 >
                     <FiArrowLeft className="pr-2 w-6" />Previous
                 </button>
@@ -24,7 +24,7 @@ const Pagination = ({ currentPage, totalPages, setCurrentPage, totalItems }) => 
                     <button
                         key={number}
                         onClick={() => setCurrentPage(number)}
-                        className={`p-2 h-[40px] w-[40px] hover:bg-blue-500/10 hover:text-[#2A34D1]/80 rounded-lg ${currentPage === number ? 'bg-blue-500/25 text-[#2A34D1]' : 'bg-white text-gray-400'}`}
+                        className={`cursor-pointer p-2 h-[40px] w-[40px] hover:bg-blue-500/10 hover:text-[#2A34D1]/80 rounded-lg ${currentPage === number ? 'bg-[#EAEBFD] text-[#2A34D1]' : 'bg-white text-gray-400'}`}
                     >
                         {number}
                     </button>
@@ -34,7 +34,7 @@ const Pagination = ({ currentPage, totalPages, setCurrentPage, totalItems }) => 
                 <button
                     onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
-                    className="p-2 px-4 border border-gray-300 rounded-lg flex items-center hover:bg-blue-500/25 hover:text-gray-700"
+                    className="cursor-pointer p-2 px-4 border border-gray-300 rounded-lg flex items-center hover:bg-blue-500/25 hover:text-gray-700"
                 >
                     Next <FiArrowRight className="pl-2 w-6" />
                 </button>
