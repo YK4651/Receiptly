@@ -1,4 +1,4 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Sidebar from "../navigation/Sidebar";
 import Navbar from "../navigation/Navbar";
 
@@ -9,15 +9,19 @@ const ClientLayout = () => {
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <Sidebar className="min-h-screen" />
+      <Sidebar />
 
       {/* Main Content */}
-      <div className="flex flex-col ml-[231px] pl-[1.5rem] flex-1">
+      <div className="flex flex-col flex-1 md:ml-64">
         {/* Navbar */}
-        {!hideNavbarPaths.includes(location.pathname) && <Navbar />}
+        {!hideNavbarPaths.includes(location.pathname) && (
+          <div className="sticky top-0 z-10 bg-white shadow-md">
+            <Navbar />
+          </div>
+        )}
 
         {/* Main Content Area */}
-        <main className="p-6 flex-grow bg-white">
+        <main className="p-6 flex-grow bg-white overflow-y-auto">
           <Outlet />
         </main>
       </div>
